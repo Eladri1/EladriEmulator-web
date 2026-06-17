@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estación Retro 3D | Sr. Croquetas ⚡</title>
+    <title>Emulador web de Sr. Croquetas ⚡</title>
     <style>
         /* 1. VARIABLES INICIALES (Tema Negro por defecto) */
         :root {
@@ -81,7 +81,9 @@
             height: 75px;
             object-fit: contain;
             margin-bottom: 15px;
-            filter: brightness(0) invert(1); /* Mantiene los logos limpios en blanco */
+            /* Si bajas las fotos ya en blanco, puedes borrar esta línea de abajo. 
+               Si las bajas en negro, esta línea las vuelve blancas automáticamente */
+            filter: brightness(0) invert(1); 
         }
 
         .console-card h3 {
@@ -125,7 +127,7 @@
 
         input[type="file"] { display: none; }
 
-        /* EL NUEVO BOTÓN DE VOLVER GAMER CON LUZ */
+        /* EL BOTÓN DE VOLVER GAMER CON LUZ */
         .btn-volver {
             position: absolute;
             top: 12px;
@@ -145,7 +147,7 @@
         .btn-volver:hover {
             color: #ffffff;
             background-color: var(--color-acento);
-            box-shadow: 0 0 15px var(--color-acento); /* Aquí genera la luz */
+            box-shadow: 0 0 15px var(--color-acento);
             text-shadow: 0 0 5px #ffffff;
         }
 
@@ -161,26 +163,31 @@
 </head>
 <body>
 
-    <h1 id="titulo-principal">Estación Retro 3D (Emulador del Sr. Croquetas) 🕹️</h1>
+    <h1 id="titulo-principal">Emulador web de Sr. Croquetas 🕹️</h1>
     <p id="subtitulo">Selecciona la plataforma a emular</p>
     
+    <!-- MENÚ DE CONSOLAS CON RUTAS LOCALES (A prueba de institutos) -->
     <div id="main-menu">
+        <!-- Tarjeta PS1 -->
         <div class="console-card card-psx" onclick="abrirCarga('psx', '.bin,.img,.chd,.iso', 'PlayStation 1')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/320px-Playstation_logo_colour.svg.png" alt="PS1 Logo">
+            <img src="ps1.png" alt="PlayStation">
             <h3>PlayStation 1</h3>
         </div>
 
+        <!-- Tarjeta NDS -->
         <div class="console-card card-nds" onclick="abrirCarga('nds', '.nds', 'Nintendo DS')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Nintendo_DS_Logo.svg/320px-Nintendo_DS_Logo.svg.png" alt="NDS Logo">
+            <img src="nds.png" alt="DS">
             <h3>Nintendo DS</h3>
         </div>
 
+        <!-- Tarjeta N64 -->
         <div class="console-card card-n64" onclick="abrirCarga('n64', '.n64,.z64,.v64', 'Nintendo 64')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0dc/Nintendo_64_Logo.svg/320px-Nintendo_64_Logo.svg.png" alt="N64 Logo">
+            <img src="n64.png" alt="N64">
             <h3>Nintendo 64</h3>
         </div>
     </div>
 
+    <!-- ZONA DE SUBIR EL ARCHIVO -->
     <div id="upload-screen">
         <button class="btn-volver" onclick="volverMenu()">← Volver</button>
         <h2 id="titulo-carga" style="color: var(--color-acento); margin-top: 0; transition: color 0.3s;">Sube tu juego</h2>
@@ -192,6 +199,7 @@
         </label>
     </div>
 
+    <!-- PANTALLA DEL EMULADOR -->
     <div id="emulator-container"></div>
 
     <script>
