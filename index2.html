@@ -2,35 +2,237 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mario Kart DS Instantáneo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier Extremo - Sr. Croquetas ☢️</title>
     <style>
-        body { background-color: #111; color: white; text-align: center; font-family: sans-serif; padding-top: 50px; }
-        #game-container { width: 640px; height: 480px; margin: 20px auto; border: 2px solid #333; background: #000; }
-        .loading-text { color: #aaa; font-style: italic; }
+        :root {
+            --bg-general: linear-gradient(3deg, #1a0000 0%, #000000 100%);
+            --color-acento: #ff3333;
+            --color-sombra: rgba(255, 51, 51, 0.3);
+        }
+
+        body {
+            background: var(--bg-general);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        h1 { 
+            color: var(--color-acento); 
+            margin-bottom: 5px; 
+            font-size: 28px; 
+            text-shadow: 0 0 10px var(--color-sombra);
+            transition: color 0.3s, text-shadow 0.3s;
+            font-weight: 800;
+            margin-top: 20px;
+        }
+        
+        #subtitulo { 
+            color: var(--color-acento); 
+            margin-bottom: 30px; 
+            font-size: 16px; 
+            opacity: 0.8; 
+        }
+
+        /* Botón para cambiar de página */
+        .btn-navegacion {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            background: transparent;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-navegacion:hover {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        #main-menu {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        .console-card {
+            background: #161616;
+            border: 2px solid #333333;
+            border-radius: 15px;
+            width: 180px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+        }
+
+        .console-card:hover { transform: translateY(-10px); background: #1e1e1e; }
+        
+        .card-psp:hover { border-color: #003791; box-shadow: 0 15px 25px rgba(0, 55, 145, 0.5); }
+        .card-dc:hover { border-color: #ff6600; box-shadow: 0 15px 25px rgba(255, 102, 0, 0.5); }
+        .card-wii:hover { border-color: #00d2ff; box-shadow: 0 15px 25px rgba(0, 210, 255, 0.5); }
+
+        .console-card img { width: 100px; object-fit: contain; margin-bottom: 15px; filter: brightness(0) invert(1); }
+        .console-card h3 { margin: 0; color: #ffffff; font-size: 16px; }
+
+        #upload-screen {
+            display: none; flex-direction: column; align-items: center; background: #161616;
+            padding: 50px 40px 40px 40px; border: 2px dashed var(--color-acento);
+            border-radius: 12px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .upload-btn {
+            background-color: var(--color-acento); color: #121212; padding: 15px 30px;
+            font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;
+            transition: all 0.3s; box-shadow: 0 4px 15px var(--color-sombra);
+        }
+
+        .upload-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+        input[type="file"] { display: none; }
+
+        .btn-volver {
+            position: absolute; top: 12px; left: 15px; background: none; border: 1px solid var(--color-acento);
+            color: var(--color-acento); padding: 5px 12px; border-radius: 6px; cursor: pointer;
+            font-weight: bold; transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover { color: #ffffff; background-color: var(--color-acento); box-shadow: 0 0 15px var(--color-acento); }
+
+        #emulator-container {
+            width: 800px; height: 600px; max-width: 95vw; max-height: 80vh; display: none;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
 
-    <h1>Mario Kart DS Online</h1>
-    <p class="loading-text">Descargando juego en la RAM... Espera unos segundos a que cargue.</p>
+    <a href="index.html" class="btn-navegacion">← Consolas Clásicas</a>
 
-    <div id="game-container">
-        <div id="game"></div>
+    <h1 id="titulo-principal">Zona Peligrosa ☢️</h1>
+    <p id="subtitulo">Tier Extremo: Prepara los ventiladores</p>
+    
+    <div id="main-menu">
+        <div class="console-card card-psp" onclick="abrirCarga('psp', '.iso,.cso', 'PlayStation Portable')">
+            <img src="psp.png" alt="PSP">
+            <h3>PSP</h3>
+        </div>
+        <div class="console-card card-dc" onclick="abrirCarga('dreamcast', '.cdi,.gdi,.chd', 'Sega Dreamcast')">
+            <img src="dc.png" alt="Dreamcast">
+            <h3>Dreamcast</h3>
+        </div>
+        <div class="console-card card-wii" onclick="abrirCarga('wii', '.iso,.wbfs', 'Nintendo Wii')">
+            <img src="wii.png" alt="Wii">
+            <h3>Nintendo Wii</h3>
+        </div>
     </div>
 
-    <script>
-        EJS_player = '#game';
-        EJS_core = 'nds'; 
-        EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
+    <div id="upload-screen">
+        <button class="btn-volver" onclick="volverMenu()">← Volver</button>
+        <h2 id="titulo-carga" style="color: var(--color-acento); margin-top: 0;">Sube tu juego</h2>
+        <p id="info-formatos" style="color: #aaaaaa; font-size: 12px; margin-bottom: 20px;"></p>
         
-        // EL TRUCO: Aquí pegas el enlace directo de internet donde esté la ROM (.nds)
-        EJS_gameUrl = 'https://archive.org/download/6108-pokemon-version-blanche-2-f-frie-nds/0168%20-%20Mario%20Kart%20DS%20%28U%29%28SCZ%29.nds'; 
+        <label class="upload-btn">
+            Seleccionar ROM
+            <input type="file" id="rom-selector">
+        </label>
+    </div>
 
-        // Arranca el emulador automáticamente al entrar a la web
-        let loader = document.createElement('script');
-        loader.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-        document.body.appendChild(loader);
+    <div id="emulator-container"></div>
+
+    <script>
+        const mainMenu = document.getElementById('main-menu');
+        const uploadScreen = document.getElementById('upload-screen');
+        const emuContainer = document.getElementById('emulator-container');
+        const subtitulo = document.getElementById('subtitulo');
+        const romSelector = document.getElementById('rom-selector');
+        const root = document.documentElement;
+        
+        let consolaActiva = "";
+
+        function abrirCarga(plataforma, extensiones, nombre) {
+            consolaActiva = plataforma;
+            
+            if (plataforma === 'psp') {
+                root.style.setProperty('--bg-general', 'linear-gradient(135deg, #001c47 0%, #000000 100%)');
+                root.style.setProperty('--color-acento', '#003791');
+                root.style.setProperty('--color-sombra', 'rgba(0, 55, 145, 0.5)');
+            } else if (plataforma === 'dreamcast') {
+                root.style.setProperty('--bg-general', 'linear-gradient(135deg, #4d1f00 0%, #000000 100%)');
+                root.style.setProperty('--color-acento', '#ff6600');
+                root.style.setProperty('--color-sombra', 'rgba(255, 102, 0, 0.5)');
+            } else if (plataforma === 'wii') {
+                root.style.setProperty('--bg-general', 'linear-gradient(135deg, #003c4a 0%, #000000 100%)');
+                root.style.setProperty('--color-acento', '#00d2ff');
+                root.style.setProperty('--color-sombra', 'rgba(0, 210, 255, 0.5)');
+            }
+
+            mainMenu.style.display = 'none';
+            uploadScreen.style.display = 'flex';
+            subtitulo.style.display = 'none';
+            
+            document.getElementById('titulo-carga').innerText = 'Cargar juego de ' + nombre;
+            document.getElementById('info-formatos').innerText = 'Formatos soportados: ' + extensiones;
+            romSelector.accept = extensiones;
+        }
+
+        function volverMenu() {
+            root.style.setProperty('--bg-general', 'linear-gradient(3deg, #1a0000 0%, #000000 100%)');
+            root.style.setProperty('--color-acento', '#ff3333');
+            root.style.setProperty('--color-sombra', 'rgba(255, 51, 51, 0.3)');
+
+            uploadScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            subtitulo.style.display = 'block';
+            romSelector.value = '';
+        }
+
+        romSelector.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            uploadScreen.style.display = 'none';
+            document.getElementById('titulo-principal').style.display = 'none';
+            document.querySelector('.btn-navegacion').style.display = 'none';
+            
+            emuContainer.style.display = 'block';
+            emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
+
+            const tRomUrl = URL.createObjectURL(file);
+
+            window.EJS_player = '#game';
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
+            window.EJS_gameUrl = tRomUrl;
+            window.EJS_startOnLoaded = true;
+
+            if (consolaActiva === 'psp') window.EJS_core = 'psp';
+            else if (consolaActiva === 'dreamcast') window.EJS_core = 'dreamcast';
+            else if (consolaActiva === 'wii') window.EJS_core = 'wii';
+
+            const script = document.createElement('script');
+            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
+            document.body.appendChild(script);
+        });
     </script>
-
 </body>
 </html>
