@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emulador web de Sr. Croquetas ⚡</title>
     <style>
-        /* 1. VARIABLES INICIALES (Tema Negro por defecto) */
+        /* 1. VARIABLES INICIALES */
         :root {
             --bg-general: linear-gradient(3deg, #121212 0%, #000000 100%);
             --color-acento: #ffffff;
             --color-sombra: rgba(255, 255, 255, 0.3);
         }
 
-        /* Fondo general usando la variable dinámina */
         body {
             background: var(--bg-general);
             color: #ffffff;
@@ -27,7 +26,6 @@
             transition: background 0.5s ease;
         }
 
-        /* Título personalizado del Sr. Croquetas */
         h1 { 
             color: var(--color-acento); 
             margin-bottom: 5px; 
@@ -44,6 +42,24 @@
             opacity: 0.8; 
             transition: color 0.3s;
         }
+
+        /* ---------------- BOTÓN HACIA JUEGOS MÍTICOS (ZONA ROJA) ---------------- */
+        #btn-ir-miticos {
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            text-decoration: none; 
+            background: #00ff66; 
+            border: 2px solid #00ff66; 
+            color: #121212; 
+            padding: 8px 15px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            box-shadow: 0 0 15px rgba(0,255,102,0.4); 
+            transition: transform 0.2s, filter 0.2s; 
+            z-index: 10;
+        }
+        #btn-ir-miticos:hover { transform: scale(1.05); filter: brightness(1.1); }
 
         /* ---------------- MENÚ DE CONSOLAS ---------------- */
         #main-menu {
@@ -71,7 +87,6 @@
             background: #1e1e1e;
         }
 
-        /* Brillo de las tarjetas en el menú principal */
         .card-psx:hover { border-color: #0072ce; box-shadow: 0 15px 25px rgba(0, 114, 206, 0.5); }
         .card-n64:hover { border-color: #e60012; box-shadow: 0 15px 25px rgba(230, 0, 18, 0.5); }
         .card-nds:hover { border-color: #00e5ff; box-shadow: 0 15px 25px rgba(0, 229, 255, 0.5); }
@@ -83,11 +98,7 @@
             filter: brightness(0) invert(1); 
         }
 
-        .console-card h3 {
-            margin: 0;
-            color: #ffffff;
-            font-size: 18px;
-        }
+        .console-card h3 { margin: 0; color: #ffffff; font-size: 18px; }
 
         /* ---------------- PANTALLA DE CARGA ---------------- */
         #upload-screen {
@@ -100,10 +111,8 @@
             border-radius: 12px;
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: border-color 0.3s;
         }
 
-        /* Botón de carga adaptativo */
         .upload-btn {
             background-color: var(--color-acento);
             color: #121212;
@@ -113,45 +122,23 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+            transition: transform 0.2s;
             box-shadow: 0 4px 15px var(--color-sombra);
         }
-
-        .upload-btn:hover {
-            transform: scale(1.05);
-            filter: brightness(1.2);
-        }
-
+        .upload-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
         input[type="file"] { display: none; }
 
-        /* EL BOTÓN DE VOLVER GAMER CON LUZ */
         .btn-volver {
-            position: absolute;
-            top: 12px;
-            left: 15px;
-            background: none;
-            border: 1px solid var(--color-acento);
-            color: var(--color-acento);
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            position: absolute; top: 12px; left: 15px; background: none; border: 1px solid var(--color-acento);
+            color: var(--color-acento); padding: 5px 12px; border-radius: 6px; cursor: pointer;
+            font-family: inherit; font-size: 13px; font-weight: bold; transition: all 0.3s ease;
         }
+        .btn-volver:hover { color: #ffffff; background-color: var(--color-acento); box-shadow: 0 0 15px var(--color-acento); }
 
-        .btn-volver:hover {
-            color: #ffffff;
-            background-color: var(--color-acento);
-            box-shadow: 0 0 15px var(--color-acento);
-            text-shadow: 0 0 5px #ffffff;
-        }
-
-        /* ---------------- CONTENEDOR DEL EMULADOR (ACTUALIZADO A 16:9) ---------------- */
+        /* ---------------- CONTENEDOR 16:9 ---------------- */
         #emulator-container {
             width: 854px; 
-            height: 480px; /* <--- Formato panorámico de combate */
+            height: 480px; 
             max-width: 95vw; 
             max-height: 80vh;
             display: none;
@@ -163,7 +150,10 @@
 </head>
 <body>
 
-    <a href="extremo.html" style="position: absolute; top: 20px; right: 20px; text-decoration: none; background: #ff0000; border: 2px solid #ff0000; color: #ffffff; padding: 8px 15px; border-radius: 8px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.5); transition: transform 0.2s;">☢️ Tier Extremo</a>
+    <!-- Enlace directo a la nueva página -->
+    <a href="miticos.html" id="btn-ir-miticos">🔥 Juegos Míticos</a>
+
+    <a href="extremo.html" style="position: absolute; top: 20px; right: 20px; text-decoration: none; background: #ff0000; border: 2px solid #ff0000; color: #ffffff; padding: 8px 15px; border-radius: 8px; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.5); z-index: 10;">☢️ Tier Extremo</a>
 
     <h1 id="titulo-principal">Emulador web de Sr. Croquetas 🕹️</h1>
     <p id="subtitulo">Selecciona la plataforma a emular</p>
@@ -173,12 +163,10 @@
             <img src="ps1.png" alt="PlayStation">
             <h3>PlayStation 1</h3>
         </div>
-
         <div class="console-card card-nds" onclick="abrirCarga('nds', '.nds', 'Nintendo DS')">
             <img src="nds.png" alt="DS">
             <h3>Nintendo DS</h3>
         </div>
-
         <div class="console-card card-n64" onclick="abrirCarga('n64', '.n64,.z64,.v64', 'Nintendo 64')">
             <img src="n64.png" alt="N64">
             <h3>Nintendo 64</h3>
@@ -187,13 +175,9 @@
 
     <div id="upload-screen">
         <button class="btn-volver" onclick="volverMenu()">← Volver</button>
-        <h2 id="titulo-carga" style="color: var(--color-acento); margin-top: 0; transition: color 0.3s;">Sube tu juego</h2>
+        <h2 id="titulo-carga" style="color: var(--color-acento); margin-top: 0;">Sube tu juego</h2>
         <p id="info-formatos" style="color: #aaaaaa; font-size: 12px; margin-bottom: 20px;">Formatos soportados: </p>
-        
-        <label class="upload-btn">
-            Seleccionar ROM
-            <input type="file" id="rom-selector">
-        </label>
+        <label class="upload-btn">Seleccionar ROM<input type="file" id="rom-selector"></label>
     </div>
 
     <div id="emulator-container"></div>
@@ -205,31 +189,24 @@
         const subtitulo = document.getElementById('subtitulo');
         const romSelector = document.getElementById('rom-selector');
         const root = document.documentElement;
-        
         let consolaActiva = "";
 
         function abrirCarga(plataforma, extensiones, nombre) {
             consolaActiva = plataforma;
-            
-            // Configuración de colores
+            document.getElementById('btn-ir-miticos').style.display = 'none';
             if (plataforma === 'psx') {
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #002561 0%, #000000 100%)');
                 root.style.setProperty('--color-acento', '#0072ce');
-                root.style.setProperty('--color-sombra', 'rgba(0, 114, 206, 0.5)');
             } else if (plataforma === 'n64') {
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #7a0006 0%, #000000 100%)');
                 root.style.setProperty('--color-acento', '#e60012');
-                root.style.setProperty('--color-sombra', 'rgba(230, 0, 18, 0.5)');
             } else if (plataforma === 'nds') {
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #004b57 0%, #000000 100%)');
                 root.style.setProperty('--color-acento', '#00e5ff');
-                root.style.setProperty('--color-sombra', 'rgba(0, 229, 255, 0.5)');
             }
-
             mainMenu.style.display = 'none';
             uploadScreen.style.display = 'flex';
             subtitulo.style.display = 'none';
-            
             document.getElementById('titulo-carga').innerText = 'Cargar juego de ' + nombre;
             document.getElementById('info-formatos').innerText = 'Formatos soportados: ' + extensiones;
             romSelector.accept = extensiones;
@@ -238,39 +215,28 @@
         function volverMenu() {
             root.style.setProperty('--bg-general', 'linear-gradient(3deg, #121212 0%, #000000 100%)');
             root.style.setProperty('--color-acento', '#ffffff');
-            root.style.setProperty('--color-sombra', 'rgba(255, 255, 255, 0.3)');
-
             uploadScreen.style.display = 'none';
             mainMenu.style.display = 'flex';
             subtitulo.style.display = 'block';
+            document.getElementById('btn-ir-miticos').style.display = 'block';
             romSelector.value = '';
         }
 
         romSelector.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             uploadScreen.style.display = 'none';
             document.getElementById('titulo-principal').style.display = 'none';
-            
-            // Activamos el cuadro del emulador
             emuContainer.style.display = 'block';
             emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
-
             const tRomUrl = URL.createObjectURL(file);
-
-            // NUEVA CONFIGURACIÓN CON EL MOTOR REPARADO (Variables EJS)
             window.EJS_player = '#game';
             window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
             window.EJS_gameUrl = tRomUrl;
             window.EJS_startOnLoaded = true;
-
-            // Asignación de núcleos correctos de la nueva librería
             if (consolaActiva === 'psx') window.EJS_core = 'psx';
             else if (consolaActiva === 'n64') window.EJS_core = 'n64';
             else if (consolaActiva === 'nds') window.EJS_core = 'nds';
-
-            // Inyección del script del cargador oficial actualizado
             const script = document.createElement('script');
             script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
             document.body.appendChild(script);
