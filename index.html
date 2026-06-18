@@ -43,16 +43,7 @@
             transition: color 0.3s;
         }
 
-        /* ---------------- BOTÓN DE LA ESQUINA IZQUIERDA ---------------- */
-        #btn-ir-miticos {
-            position: absolute; top: 20px; left: 20px; text-decoration: none; 
-            background: #00ff66; border: 2px solid #00ff66; color: #121212; 
-            padding: 8px 15px; border-radius: 8px; font-weight: bold; 
-            box-shadow: 0 0 15px rgba(0,255,102,0.4); transition: transform 0.2s, filter 0.2s; z-index: 10;
-        }
-        #btn-ir-miticos:hover { transform: scale(1.05); filter: brightness(1.1); }
-
-        /* ---------------- NUEVO BOTÓN SIMPLE PANEL EXTRA (ARRIBA DERECHA) ---------------- */
+        /* ---------------- BOTÓN PANEL EXTRA (ARRIBA DERECHA) ---------------- */
         #btn-abrir-modal {
             position: absolute; top: 20px; right: 20px;
             background: #16161a; border: 2px solid #333; color: #fff;
@@ -63,14 +54,12 @@
         #btn-abrir-modal:hover { border-color: #00ff66; box-shadow: 0 0 15px rgba(0,255,102,0.3); }
 
         /* ---------------- ESTILOS DEL MODAL (VENTANITA DE EXTRAS) ---------------- */
-        /* Fondo que oscurece y desenfoca el menú de atrás */
         #modal-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(5px); z-index: 90;
         }
 
-        /* Estructura de la ventanita */
         #modal-ventana {
             display: none; position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%); width: 340px;
@@ -91,12 +80,12 @@
         .modal-seccion { display: flex; flex-direction: column; gap: 10px; }
 
         /* Botones y Links del Panel */
-        .modal-link, .modal-btn-juego {
+        .modal-link {
             display: block; text-align: center; text-decoration: none; padding: 11px;
             border-radius: 8px; font-weight: bold; font-family: inherit; font-size: 14px;
-            cursor: pointer; transition: background 0.2s, transform 0.1s; border: none;
+            transition: background 0.2s, transform 0.1s; border: none;
         }
-        .modal-link:active, .modal-btn-juego:active { transform: scale(0.98); }
+        .modal-link:active { transform: scale(0.98); }
 
         .link-extremo { background: #ff3333; color: white; }
         .link-extremo:hover { background: #e60000; box-shadow: 0 0 10px rgba(255,51,51,0.3); }
@@ -104,8 +93,8 @@
         .link-miticos { background: #0072ce; color: white; }
         .link-miticos:hover { background: #005bb3; box-shadow: 0 0 10px rgba(0,114,206,0.3); }
 
-        .modal-btn-juego { background: #22222b; color: #fff; border: 1px solid #444455; }
-        .modal-btn-juego:hover { background: #2d2d3a; border-color: #00ff66; }
+        .link-mas-miticas { background: #ff9900; color: white; }
+        .link-mas-miticas:hover { background: #e68a00; box-shadow: 0 0 10px rgba(255,153,0,0.3); }
 
 
         /* ---------------- MENÚ DE CONSOLAS PRINCIPAL ---------------- */
@@ -148,7 +137,7 @@
         }
         .btn-volver:hover { color: #ffffff; background-color: var(--color-acento); box-shadow: 0 0 15px var(--color-acento); }
 
-        /* ---------------- CONTENEDOR 16:9 ---------------- */
+        /* ---------------- CONTENEDOR EMULADOR ---------------- */
         #emulator-container {
             width: 854px; height: 480px; max-width: 95vw; max-height: 80vh;
             display: none; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -157,26 +146,18 @@
 </head>
 <body>
 
-    <!-- Botones Superiores -->
-    <a href="miticos.html" id="btn-ir-miticos">🔥 Juegos Míticos</a>
     <button id="btn-abrir-modal" onclick="abrirModal()">🛠️ Panel Extra</button>
 
-    <!-- CAPA OSCURA Y VENTANITA DESPLEGABLE -->
     <div id="modal-overlay" onclick="cerrarModal()"></div>
     <div id="modal-ventana">
         <button class="modal-cerrar" onclick="cerrarModal()">✕</button>
         <h2>🚀 Panel de Extras</h2>
         
         <div class="modal-seccion">
-            <h3>Páginas Especiales</h3>
+            <h3>Secciones Especiales</h3>
             <a href="extremo.html" class="modal-link link-extremo">☢️ Tier Extremo</a>
             <a href="miticos.html" class="modal-link link-miticos">🔥 Juegos Míticos</a>
-        </div>
-
-        <div class="modal-seccion">
-            <h3>Carga Automática (MAME/Retro)</h3>
-            <button class="modal-btn-juego" onclick="cargarJuegoAutomatico('arcade', 'roms/metalslug.zip')">🕹️ Metal Slug (MAME)</button>
-            <button class="modal-btn-juego" onclick="cargarJuegoAutomatico('snes', 'roms/mario_world.sfc')">🎮 Super Mario World (SNES)</button>
+            <a href="mas_miticas.html" class="modal-link link-mas-miticas">🕹️ Las Más Míticas</a>
         </div>
     </div>
 
@@ -229,7 +210,6 @@
 
         function abrirCarga(plataforma, extensiones, nombre) {
             consolaActiva = plataforma;
-            document.getElementById('btn-ir-miticos').style.display = 'none';
             document.getElementById('btn-abrir-modal').style.display = 'none';
             if (plataforma === 'psx') {
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #002561 0%, #000000 100%)');
@@ -255,33 +235,8 @@
             uploadScreen.style.display = 'none';
             mainMenu.style.display = 'flex';
             subtitulo.style.display = 'block';
-            document.getElementById('btn-ir-miticos').style.display = 'block';
             document.getElementById('btn-abrir-modal').style.display = 'block';
             romSelector.value = '';
-        }
-
-        // FUNCIÓN GENERAL PARA CARGAR JUEGOS AUTOMÁTICOS DESDE EL PANEL EXTRA
-        function cargarJuegoAutomatico(core, rutaRom) {
-            cerrarModal(); // Cierra el modal antes de lanzar el juego
-            
-            mainMenu.style.display = 'none';
-            subtitulo.style.display = 'none';
-            document.getElementById('btn-ir-miticos').style.display = 'none';
-            document.getElementById('btn-abrir-modal').style.display = 'none';
-            document.getElementById('titulo-principal').style.display = 'none';
-            
-            emuContainer.style.display = 'block';
-            emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
-            
-            window.EJS_player = '#game';
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
-            window.EJS_gameUrl = rutaRom;
-            window.EJS_startOnLoaded = true;
-            window.EJS_core = core;
-            
-            const script = document.createElement('script');
-            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
-            document.body.appendChild(script);
         }
 
         romSelector.addEventListener('change', function(e) {
