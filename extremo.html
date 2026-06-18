@@ -94,12 +94,13 @@
         .card-wii:hover { border-color: #00d2ff; box-shadow: 0 15px 25px rgba(0, 210, 255, 0.5); }
 
         .console-card img {
-    width: 130px; /* Cámbialo a 150px o 160px si lo quieres más bestia */
-    height: 90px; /* Le forzamos una altura para que no se hagan pequeños */
-    object-fit: contain;
-    margin-bottom: 15px;
-    filter: brightness(0) invert(1);
-}
+            width: 150px; /* Más grandes para que destaquen */
+            height: 100px; /* Altura fija para que no encojan */
+            object-fit: contain;
+            margin-bottom: 15px;
+            filter: brightness(0) invert(1);
+        }
+        
         .console-card h3 { margin: 0; color: #ffffff; font-size: 16px; }
 
         #upload-screen {
@@ -217,6 +218,13 @@
             const file = e.target.files[0];
             if (!file) return;
 
+            // EL HUEVO DE PASCUA DE LA WII
+            if (consolaActiva === 'wii') {
+                alert("¡Alerta de Sr. Croquetas! ⚠️\n\nEmular la Wii en un navegador derretiría tu PC y causaría un agujero negro en tu clase. \n\nEsta tarjeta es pura decoración (de momento). ¡Prueba con PSP o Dreamcast!");
+                volverMenu(); // Te devuelve al menú directamente
+                return; // Corta la ejecución para que no de error
+            }
+
             uploadScreen.style.display = 'none';
             document.getElementById('titulo-principal').style.display = 'none';
             document.querySelector('.btn-navegacion').style.display = 'none';
@@ -231,9 +239,9 @@
             window.EJS_gameUrl = tRomUrl;
             window.EJS_startOnLoaded = true;
 
-            if (consolaActiva === 'psp') window.EJS_core = 'psp';
-            else if (consolaActiva === 'dreamcast') window.EJS_core = 'dreamcast';
-            else if (consolaActiva === 'wii') window.EJS_core = 'wii';
+            // LOS NOMBRES DE LOS MOTORES CORREGIDOS AQUÍ
+            if (consolaActiva === 'psp') window.EJS_core = 'ppsspp';
+            else if (consolaActiva === 'dreamcast') window.EJS_core = 'flycast';
 
             const script = document.createElement('script');
             script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
