@@ -28,7 +28,7 @@
         }
         #btn-abrir-modal:hover { border-color: #00ff66; box-shadow: 0 0 15px rgba(0,255,102,0.3); }
 
-        /* --- BARRA LATERAL DESLIZANTE (NUEVO MODAL) --- */
+        /* --- BARRA LATERAL DESLIZANTE (MODAL) --- */
         #modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 90;
@@ -36,7 +36,7 @@
         }
 
         #modal-ventana {
-            position: fixed; top: 0; right: -320px; /* Escondido por defecto */
+            position: fixed; top: 0; right: -320px;
             width: 320px; height: 100vh; background: #111116; border-left: 2px solid #333344;
             padding: 40px 25px; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.8);
             display: flex; flex-direction: column; gap: 20px; box-sizing: border-box;
@@ -61,8 +61,6 @@
         }
         .modal-link:active { transform: scale(0.98); }
 
-        .link-extremo { background: #ff3333; color: white; }
-        .link-extremo:hover { background: #e60000; box-shadow: 0 0 10px rgba(255,51,51,0.3); }
         .link-miticos { background: #0072ce; color: white; }
         .link-miticos:hover { background: #005bb3; box-shadow: 0 0 10px rgba(0,114,206,0.3); }
         .link-mas-miticas { background: #ff9900; color: white; }
@@ -101,7 +99,6 @@
         
         <div class="modal-seccion">
             <h3>Secciones Especiales</h3>
-            <a href="extremo.html" class="modal-link link-extremo">☢️ Tier Extremo</a>
             <a href="miticos.html" class="modal-link link-miticos">🔥 Juegos Míticos</a>
             <a href="mas_miticas.html" class="modal-link link-mas-miticas">🕹️ Las Más Míticas (2D)</a>
         </div>
