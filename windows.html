@@ -5,24 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows 95 - Sr. Croquetas 💻</title>
     <style>
+        :root {
+            --bg-general: linear-gradient(135deg, #002b5c 0%, #000000 100%);
+            --color-acento: #0078d7;
+        }
         body {
-            background: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-general); color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100vh; margin: 0; overflow: hidden;
         }
         .btn-volver {
             position: absolute; top: 20px; left: 20px; background: #16161a; border: 1px solid #333;
-            color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;
-            text-decoration: none; z-index: 10;
+            color: #fff; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            text-decoration: none; z-index: 10; transition: border-color 0.2s;
         }
-        .btn-volver:hover { border-color: #0078d7; }
+        .btn-volver:hover { border-color: var(--color-acento); }
 
         #emulator-container {
-            width: 800px; height: 600px; max-width: 95vw; max-height: 85vh;
-            border-radius: 6px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-            background: #000; border: 2px solid #222;
+            width: 800px; height: 600px; max-width: 95vw; max-height: 80vh;
+            border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+            background: #000; position: relative; border: 2px solid #333;
+            display: flex; align-items: center; justify-content: center;
         }
         #screen_container { width: 100%; height: 100%; }
+
+        /* Consola de estado interna */
+        #status-overlay {
+            position: absolute; color: #00ff66; font-family: monospace; font-size: 14px;
+            background: rgba(16, 16, 22, 0.95); padding: 25px; border-radius: 10px; text-align: center;
+            max-width: 80%; z-index: 20; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+        .error-text { color: #ff4d4d !important; }
+        .file-btn {
+            background: var(--color-acento); color: white; padding: 10px 18px; border: none;
+            border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; display: inline-block;
+            transition: background 0.2s;
+        }
+        .file-btn:hover { background: #005a9e; }
     </style>
 </head>
 <body>
@@ -30,35 +49,77 @@
     <a href="index.html" class="btn-volver">← Volver al menú</a>
 
     <div id="emulator-container">
+        <div id="status-overlay">
+            <div id="status-text">Conectando con el motor v86...</div>
+            <label id="file-fallback" style="display:none;">
+                <span class="file-btn">Cargar archivo win95.img local</span>
+                <input type="file" id="local-file" accept=".img" style="display:none;">
+            </label>
+        </div>
         <div id="screen_container">
             <div style="white-space: pre; font-family: monospace;"></div>
             <canvas style="display: none"></canvas>
         </div>
     </div>
 
-    <!-- Librería v86 oficial -->
     <script src="https://cdn.jsdelivr.net/gh/copy/v86@master/build/libv86.js"></script>
     <script>
-        window.onload = function() {
-            window.emulator = new V86Starter({
-                screen_container: document.getElementById("screen_container"),
-                wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
-                bios: {
-                    url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/seabios.bin",
-                },
-                vga_bios: {
-                    url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/vgabios.bin",
-                },
-                // Usamos la URL directa del disco de Win95 optimizado para v86
-                hda: {
-                    url: "https://copy.sh/v86/images/windows95.img",
-                    async: true,
-                },
-                memory_size: 128 * 1024 * 1024, // 128MB
-                vga_memory_size: 8 * 1024 * 1024,
-                autostart: true,
+        const statusOverlay = document.getElementById('status-overlay');
+        const statusText = document.getElementById('status-text');
+        const fileFallback = document.getElementById('file-fallback');
+        const localFile = document.getElementById('local-file');
+
+        function updateStatus(msg, isError = false) {
+            statusText.innerText = msg;
+            if (isError) statusText.classList.add('error-text');
+            else statusText.classList.remove('error-text');
+        }
+
+        function arrancar(hdaConfig) {
+            updateStatus("Cargando BIOS y WebAssembly desde CDN...");
+            try {
+                window.emulator = new V86Starter({
+                    screen_container: document.getElementById("screen_container"),
+                    wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
+                    bios: { url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/seabios.bin" },
+                    vga_bios: { url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/vgabios.bin" },
+                    hda: hdaConfig,
+                    memory_size: 128 * 1024 * 1024,
+                    vga_memory_size: 8 * 1024 * 1024,
+                    autostart: true,
+                });
+
+                // Ocultar mensaje al iniciar la señal de vídeo
+                window.emulator.add_listener("screen-fill-rect", function() {
+                    statusOverlay.style.display = 'none';
+                });
+            } catch (err) {
+                updateStatus("Error de inicialización: " + err.message, true);
+            }
+        }
+
+        // Probar conexión remota con gestión de errores CORS
+        const imgUrl = "https://copy.sh/v86/images/windows95.img";
+        
+        fetch(imgUrl, { method: 'HEAD', mode: 'cors' })
+            .then(res => {
+                if (res.ok) {
+                    arrancar({ url: imgUrl, async: true });
+                } else {
+                    throw new Error("El servidor bloqueó el acceso (CORS 403/404)");
+                }
+            })
+            .catch(() => {
+                updateStatus("⚠️ No se puede descargar el disco remoto (Bloqueo de CORS o cortafuegos de la red).\nUsa un disco local:", true);
+                fileFallback.style.display = 'block';
             });
-        };
+
+        localFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            fileFallback.style.display = 'none';
+            arrancar({ file: file, async: true });
+        });
     </script>
 </body>
 </html>
