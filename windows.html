@@ -5,72 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows 95 - Sr. Croquetas 💻</title>
     <style>
-        :root {
-            --bg-general: linear-gradient(135deg, #002b5c 0%, #000000 100%);
-            --color-acento: #0078d7;
-            --color-sombra: rgba(0, 120, 215, 0.4);
-        }
-
         body {
-            background: var(--bg-general); color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100vh; margin: 0; overflow: hidden;
         }
-
-        h1 { color: #ffffff; margin-bottom: 5px; font-size: 26px; font-weight: 800; text-shadow: 0 0 10px var(--color-sombra); }
-        #subtitulo { color: #aaaaaa; margin-bottom: 25px; font-size: 15px; }
-
-        #upload-screen {
-            display: flex; flex-direction: column; align-items: center; background: #16161a;
-            padding: 40px; border: 2px dashed var(--color-acento); border-radius: 12px;
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.6); max-width: 450px; text-align: center;
-        }
-        .upload-btn {
-            background-color: var(--color-acento); color: #ffffff; padding: 12px 24px;
-            font-size: 15px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;
-            transition: transform 0.2s, background 0.2s; box-shadow: 0 4px 15px var(--color-sombra);
-            margin-top: 15px;
-        }
-        .upload-btn:hover { transform: scale(1.05); background-color: #005a9e; }
-        input[type="file"] { display: none; }
-
         .btn-volver {
             position: absolute; top: 20px; left: 20px; background: #16161a; border: 1px solid #333;
-            color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-family: inherit;
-            font-weight: bold; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            text-decoration: none; z-index: 10;
         }
-        .btn-volver:hover { border-color: var(--color-acento); box-shadow: 0 0 15px var(--color-sombra); }
+        .btn-volver:hover { border-color: #0078d7; }
 
         #emulator-container {
-            width: 800px; height: 600px; max-width: 95vw; max-height: 80vh;
-            display: none; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-            background: #000; position: relative; border: 2px solid #333;
+            width: 800px; height: 600px; max-width: 95vw; max-height: 85vh;
+            border-radius: 6px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+            background: #000; border: 2px solid #222;
         }
         #screen_container { width: 100%; height: 100%; }
-        
-        #loading-msg {
-            display: none; margin-top: 15px; font-size: 14px; color: #00ff66; font-weight: bold;
-        }
     </style>
 </head>
 <body>
 
     <a href="index.html" class="btn-volver">← Volver al menú</a>
-
-    <h1 id="titulo-principal">Emulador de Windows 95 🪟</h1>
-    <p id="subtitulo">El clásico de los 90 corriendo directamente en tu navegador</p>
-
-    <div id="upload-screen">
-        <h2 style="margin-top:0; font-size:20px; color:#fff;">Cargar disco de Windows 95</h2>
-        <p style="font-size:13px; color:#aaa; line-height: 1.4;">
-            Selecciona tu archivo <b>.img</b> y arranca el sistema.
-        </p>
-        <label class="upload-btn">
-            Seleccionar archivo .img
-            <input type="file" id="hda-selector" accept=".img">
-        </label>
-        <div id="loading-msg">Montando disco duro virtual... Arrancando sistema.</div>
-    </div>
 
     <div id="emulator-container">
         <div id="screen_container">
@@ -79,30 +36,11 @@
         </div>
     </div>
 
+    <!-- Librería v86 oficial -->
     <script src="https://cdn.jsdelivr.net/gh/copy/v86@master/build/libv86.js"></script>
     <script>
-        const uploadScreen = document.getElementById('upload-screen');
-        const emuContainer = document.getElementById('emulator-container');
-        const hdaSelector = document.getElementById('hda-selector');
-        const loadingMsg = document.getElementById('loading-msg');
-        const tituloPrincipal = document.getElementById('titulo-principal');
-        const subtitulo = document.getElementById('subtitulo');
-
-        hdaSelector.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            loadingMsg.style.display = 'block';
-            hdaSelector.parentElement.style.opacity = '0.5';
-            hdaSelector.disabled = true;
-
-            uploadScreen.style.display = 'none';
-            tituloPrincipal.style.display = 'none';
-            subtitulo.style.display = 'none';
-            emuContainer.style.display = 'block';
-
-            // Pasamos el archivo directamente al objeto de configuración de v86
-            window.emulator = new V86({
+        window.onload = function() {
+            window.emulator = new V86Starter({
                 screen_container: document.getElementById("screen_container"),
                 wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
                 bios: {
@@ -111,15 +49,16 @@
                 vga_bios: {
                     url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/vgabios.bin",
                 },
+                // Usamos la URL directa del disco de Win95 optimizado para v86
                 hda: {
+                    url: "https://copy.sh/v86/images/windows95.img",
                     async: true,
-                    file: file, // v86 lee el archivo nativamente sin bloquear el navegador
                 },
-                memory_size: 128 * 1024 * 1024,
+                memory_size: 128 * 1024 * 1024, // 128MB
                 vga_memory_size: 8 * 1024 * 1024,
                 autostart: true,
             });
-        });
+        };
     </script>
 </body>
 </html>
