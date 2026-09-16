@@ -20,7 +20,7 @@
         h1 { color: #ffffff; margin-bottom: 5px; font-size: 26px; font-weight: 800; text-shadow: 0 0 10px var(--color-sombra); }
         #subtitulo { color: #aaaaaa; margin-bottom: 25px; font-size: 15px; }
 
-        /* --- PANTALLA DE CARGA / SUBIDA DE IMAGEN HDA --- */
+        /* --- PANTALLA DE CARGA --- */
         #upload-screen {
             display: flex; flex-direction: column; align-items: center; background: #16161a;
             padding: 40px; border: 2px dashed var(--color-acento); border-radius: 12px;
@@ -50,7 +50,6 @@
         }
         #screen_container { width: 100%; height: 100%; }
         
-        /* Mensaje de estado de carga */
         #loading-msg {
             display: none; margin-top: 15px; font-size: 14px; color: #00ff66; font-weight: bold;
         }
@@ -63,20 +62,18 @@
     <h1 id="titulo-principal">Emulador de Windows 95 🪟</h1>
     <p id="subtitulo">El clásico de los 90 corriendo directamente en tu navegador</p>
 
-    <!-- Pantalla para subir la imagen de disco duro (.img) de Win95 -->
     <div id="upload-screen">
         <h2 style="margin-top:0; font-size:20px; color:#fff;">Cargar disco de Windows 95</h2>
         <p style="font-size:13px; color:#aaa; line-height: 1.4;">
-            Para arrancar Windows 95, selecciona tu archivo de disco virtual <b>(.img)</b> optimizado para v86.
+            Selecciona tu archivo de disco virtual <b>(.img)</b> para v86.
         </p>
         <label class="upload-btn">
             Seleccionar win95.img
             <input type="file" id="hda-selector" accept=".img">
         </label>
-        <div id="loading-msg">Cargando motor de emulación y BIOS... Por favor espera.</div>
+        <div id="loading-msg">Cargando motor WebAssembly y BIOS... Un momento.</div>
     </div>
 
-    <!-- Contenedor donde v86 renderizará Windows -->
     <div id="emulator-container">
         <div id="screen_container">
             <div style="white-space: pre; font-family: monospace;"></div>
@@ -84,7 +81,6 @@
         </div>
     </div>
 
-    <!-- Script de v86 para emulación x86 en WebAssembly -->
     <script src="https://cdn.jsdelivr.net/gh/copy/v86@master/build/libv86.js"></script>
     <script>
         const uploadScreen = document.getElementById('upload-screen');
@@ -111,9 +107,10 @@
                 subtitulo.style.display = 'none';
                 emuContainer.style.display = 'block';
 
-                // Inicializar el emulador v86 con la BIOS y el disco duro subido
                 window.emulator = new V86({
                     screen_container: document.getElementById("screen_container"),
+                    // ¡AQUÍ ESTABA EL TRUCO! Faltaba enlazar el .wasm del CDN
+                    wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
                     bios: {
                         url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/seabios.bin",
                     },
@@ -123,7 +120,7 @@
                     hda: {
                         buffer: buffer,
                     },
-                    memory_size: 128 * 1024 * 1024, // 128 MB de RAM
+                    memory_size: 128 * 1024 * 1024,
                     vga_memory_size: 8 * 1024 * 1024,
                     autostart: true,
                 });
