@@ -38,7 +38,6 @@
         }
         .game-card:hover { transform: translateY(-10px); }
         
-        .card-mame:hover { border-color: #ff0055; box-shadow: 0 15px 25px rgba(255, 0, 85, 0.4); }
         .card-snes:hover { border-color: #3b5998; box-shadow: 0 15px 25px rgba(59, 89, 152, 0.4); }
         .card-atari:hover { border-color: #ff3333; box-shadow: 0 15px 25px rgba(255, 51, 51, 0.4); }
         .card-gb:hover { border-color: #9bbc0f; box-shadow: 0 15px 25px rgba(155, 188, 15, 0.4); }
@@ -68,11 +67,6 @@
     <p id="subtitulo">Selecciona la plataforma clásica y sube tu ROM</p>
 
     <div id="games-menu">
-        <div class="game-card card-mame" onclick="abrirCarga('arcade', '.zip', 'MAME Arcade', '#ff0055')">
-            <img src="mame_logo.png" alt="MAME">
-            <h3>MAME</h3>
-            <span>Recreativas</span>
-        </div>
         <div class="game-card card-snes" onclick="abrirCarga('snes', '.sfc,.smc', 'Super Nintendo', '#3b5998')">
             <img src="snes_logo.png" alt="SNES">
             <h3>Super Nintendo</h3>
@@ -159,9 +153,7 @@
             window.EJS_gameUrl = tRomUrl;
             window.EJS_startOnLoaded = true;
             
-            // Asignación de núcleos corregida
-            if (consolaActiva === 'arcade') window.EJS_core = 'mame2003';
-            else if (consolaActiva === 'snes') window.EJS_core = 'snes';
+            if (consolaActiva === 'snes') window.EJS_core = 'snes';
             else if (consolaActiva === 'atari') window.EJS_core = 'atari2600';
             else if (consolaActiva === 'gameboy') window.EJS_core = 'gba';
             else if (consolaActiva === 'sega') window.EJS_core = 'segaMD';
