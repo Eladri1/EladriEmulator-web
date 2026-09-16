@@ -28,8 +28,15 @@
         }
         #btn-volver-inicio:hover { transform: scale(1.05); }
 
-        /* --- MENÚ DE CONSOLAS 2D --- */
-        #games-menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; max-width: 800px; margin-bottom: 40px; }
+        /* --- MENÚ DE CONSOLAS 2D (Arreglado el TOC, ahora en 1 fila) --- */
+        #games-menu { 
+            display: flex; 
+            flex-wrap: nowrap; /* Fuerza a que no salten de línea */
+            justify-content: center; 
+            gap: 25px; 
+            max-width: 1000px; /* Ampliado para que quepan las 4 */
+            margin-bottom: 40px; 
+        }
 
         .game-card {
             background: #141419; border: 2px solid #2a2a35; border-radius: 15px; width: 180px; height: 200px;
@@ -43,7 +50,12 @@
         .card-gb:hover { border-color: #9bbc0f; box-shadow: 0 15px 25px rgba(155, 188, 15, 0.4); }
         .card-sega:hover { border-color: #00ccff; box-shadow: 0 15px 25px rgba(0, 204, 255, 0.4); }
 
+        /* Filtro blanco para las demás */
         .game-card img { width: 100px; height: 80px; object-fit: contain; margin-bottom: 15px; filter: brightness(0) invert(1); }
+        
+        /* Quitamos el filtro solo a Sega para que no se vea como un bloque */
+        .card-sega img { filter: none; }
+
         .game-card h3 { margin: 0; color: #ffffff; font-size: 16px; font-weight: 600; text-align: center; }
         .game-card span { font-size: 11px; color: #aaa; margin-top: 4px; }
 
