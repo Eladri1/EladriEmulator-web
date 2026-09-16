@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 95 - Sr. Croquetas 💻</title>
+    <style>
+        :root {
+            --bg-general: linear-gradient(135deg, #002b5c 0%, #000000 100%);
+            --color-acento: #0078d7;
+            --color-sombra: rgba(0, 120, 215, 0.4);
+        }
+
+        body {
+            background: var(--bg-general); color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; margin: 0; overflow: hidden;
+        }
+
+        h1 { color: #ffffff; margin-bottom: 5px; font-size: 26px; font-weight: 800; text-shadow: 0 0 10px var(--color-sombra); }
+        #subtitulo { color: #aaaaaa; margin-bottom: 25px; font-size: 15px; }
+
+        /* --- PANTALLA DE CARGA / SUBIDA DE IMAGEN HDA --- */
+        #upload-screen {
+            display: flex; flex-direction: column; align-items: center; background: #16161a;
+            padding: 40px; border: 2px dashed var(--color-acento); border-radius: 12px;
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.6); max-width: 450px; text-align: center;
+        }
+        .upload-btn {
+            background-color: var(--color-acento); color: #ffffff; padding: 12px 24px;
+            font-size: 15px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;
+            transition: transform 0.2s, background 0.2s; box-shadow: 0 4px 15px var(--color-sombra);
+            margin-top: 15px;
+        }
+        .upload-btn:hover { transform: scale(1.05); background-color: #005a9e; }
+        input[type="file"] { display: none; }
+
+        .btn-volver {
+            position: absolute; top: 20px; left: 20px; background: #16161a; border: 1px solid #333;
+            color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-family: inherit;
+            font-weight: bold; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .btn-volver:hover { border-color: var(--color-acento); box-shadow: 0 0 15px var(--color-sombra); }
+
+        /* --- CONTENEDOR EMULADOR V86 --- */
+        #emulator-container {
+            width: 800px; height: 600px; max-width: 95vw; max-height: 80vh;
+            display: none; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+            background: #000; position: relative; border: 2px solid #333;
+        }
+        #screen_container { width: 100%; height: 100%; }
+        
+        /* Mensaje de estado de carga */
+        #loading-msg {
+            display: none; margin-top: 15px; font-size: 14px; color: #00ff66; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="btn-volver">← Volver al menú</a>
+
+    <h1 id="titulo-principal">Emulador de Windows 95 🪟</h1>
+    <p id="subtitulo">El clásico de los 90 corriendo directamente en tu navegador</p>
+
+    <!-- Pantalla para subir la imagen de disco duro (.img) de Win95 -->
+    <div id="upload-screen">
+        <h2 style="margin-top:0; font-size:20px; color:#fff;">Cargar disco de Windows 95</h2>
+        <p style="font-size:13px; color:#aaa; line-height: 1.4;">
+            Para arrancar Windows 95, selecciona tu archivo de disco virtual <b>(.img)</b> optimizado para v86.
+        </p>
+        <label class="upload-btn">
+            Seleccionar win95.img
+            <input type="file" id="hda-selector" accept=".img">
+        </label>
+        <div id="loading-msg">Cargando motor de emulación y BIOS... Por favor espera.</div>
+    </div>
+
+    <!-- Contenedor donde v86 renderizará Windows -->
+    <div id="emulator-container">
+        <div id="screen_container">
+            <div style="white-space: pre; font-family: monospace;"></div>
+            <canvas style="display: none"></canvas>
+        </div>
+    </div>
+
+    <!-- Script de v86 para emulación x86 en WebAssembly -->
+    <script src="https://cdn.jsdelivr.net/gh/copy/v86@master/build/libv86.js"></script>
+    <script>
+        const uploadScreen = document.getElementById('upload-screen');
+        const emuContainer = document.getElementById('emulator-container');
+        const hdaSelector = document.getElementById('hda-selector');
+        const loadingMsg = document.getElementById('loading-msg');
+        const tituloPrincipal = document.getElementById('titulo-principal');
+        const subtitulo = document.getElementById('subtitulo');
+
+        hdaSelector.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            loadingMsg.style.display = 'block';
+            hdaSelector.parentElement.style.opacity = '0.5';
+            hdaSelector.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const buffer = evt.target.result;
+
+                uploadScreen.style.display = 'none';
+                tituloPrincipal.style.display = 'none';
+                subtitulo.style.display = 'none';
+                emuContainer.style.display = 'block';
+
+                // Inicializar el emulador v86 con la BIOS y el disco duro subido
+                window.emulator = new V86({
+                    screen_container: document.getElementById("screen_container"),
+                    bios: {
+                        url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/seabios.bin",
+                    },
+                    vga_bios: {
+                        url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/vgabios.bin",
+                    },
+                    hda: {
+                        buffer: buffer,
+                    },
+                    memory_size: 128 * 1024 * 1024, // 128 MB de RAM
+                    vga_memory_size: 8 * 1024 * 1024,
+                    autostart: true,
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    </script>
+</body>
+</html>
