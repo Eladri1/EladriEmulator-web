@@ -28,7 +28,7 @@
         }
         #btn-abrir-modal:hover { border-color: #00ff66; box-shadow: 0 0 15px rgba(0,255,102,0.3); }
 
-        /* --- BARRA LATERAL DESLIZANTE (MODAL) --- */
+        /* --- BARRA LATERAL DESLIZANTE --- */
         #modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 90;
@@ -36,12 +36,17 @@
         }
 
         #modal-ventana {
-            position: fixed; top: 0; right: -320px;
-            width: 320px; height: 100vh; background: #111116; border-left: 2px solid #333344;
+            position: fixed; top: 0; right: -380px; 
+            width: 380px; height: 100vh; background: #111116; border-left: 2px solid #333344;
             padding: 40px 25px; z-index: 100; box-shadow: -10px 0 30px rgba(0,0,0,0.8);
             display: flex; flex-direction: column; gap: 20px; box-sizing: border-box;
             transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto; 
         }
+
+        #modal-ventana::-webkit-scrollbar { width: 6px; }
+        #modal-ventana::-webkit-scrollbar-track { background: #111116; }
+        #modal-ventana::-webkit-scrollbar-thumb { background: #333344; border-radius: 4px; }
 
         .modal-cerrar {
             position: absolute; top: 20px; right: 20px; background: none; border: none;
@@ -65,6 +70,23 @@
         .link-windows:hover { background: #005a9e; box-shadow: 0 0 10px rgba(0,120,215,0.4); }
         .link-mas-miticas { background: #ff9900; color: white; }
         .link-mas-miticas:hover { background: #e68a00; box-shadow: 0 0 10px rgba(255,153,0,0.3); }
+
+        /* --- TARJETAS DE JUEGOS PREDESCARGADOS --- */
+        .game-card {
+            background: #1a1a22; border: 1px solid #282835; border-radius: 10px; padding: 10px;
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .game-card:hover {
+            transform: translateX(-4px); border-color: #00ff66; background: #22222d;
+        }
+        .game-card img {
+            width: 55px; height: 75px; object-fit: cover; border-radius: 6px; background: #000;
+        }
+        .game-info { flex: 1; }
+        .game-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #fff; font-weight: 700; }
+        .game-info p { margin: 0; font-size: 12px; color: #aaa; }
+        .game-tag { display: inline-block; background: rgba(255,255,255,0.1); color: #ccc; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-top: 6px; }
 
         /* --- MENÚ PRINCIPAL --- */
         #main-menu { display: flex; gap: 30px; }
@@ -90,7 +112,7 @@
 </head>
 <body>
 
-    <button id="btn-abrir-modal" onclick="abrirModal()">🛠️ Panel Extra</button>
+    <button id="btn-abrir-modal" onclick="abrirModal()">🛠️ Panel Extra / Juegos</button>
 
     <div id="modal-overlay" onclick="cerrarModal()"></div>
     <div id="modal-ventana">
@@ -102,13 +124,58 @@
             <a href="windows.html" class="modal-link link-windows">💻 Emulador de Windows</a>
             <a href="mas_miticas.html" class="modal-link link-mas-miticas">🕹️ Las Más Míticas (2D)</a>
         </div>
+
+        <div class="modal-seccion" style="margin-top: 15px;">
+            <h3>🎮 Juegos Predescargados</h3>
+            
+            <!-- Crash Bandicoot 1 -->
+            <div class="game-card" onclick="cargarJuegoPredescargado('https://github.com/Eladri1/EladriEmulator-web/releases/download/games/Crash.Bandicoot.USA.bin', 'psx')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/4/44/Crash_Bandicoot_Cover.png" alt="Crash 1">
+                <div class="game-info">
+                    <h4>Crash Bandicoot</h4>
+                    <p>PS1 (USA)</p>
+                    <span class="game-tag">PlayStation 1</span>
+                </div>
+            </div>
+
+            <!-- Crash Bandicoot 2 -->
+            <div class="game-card" onclick="cargarJuegoPredescargado('https://github.com/Eladri1/EladriEmulator-web/releases/download/games/Crash.Bandicoot.2.-.Cortex.Strikes.Back.PS1.Espanol.bin', 'psx')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/c/cd/Crash_Bandicoot_2_Cortex_Strikes_Back_PlayStation_game_cover.jpg" alt="Crash 2">
+                <div class="game-info">
+                    <h4>Crash Bandicoot 2</h4>
+                    <p>Cortex Strikes Back (Español)</p>
+                    <span class="game-tag">PlayStation 1</span>
+                </div>
+            </div>
+
+            <!-- Gran Turismo 2 -->
+            <div class="game-card" onclick="cargarJuegoPredescargado('https://github.com/Eladri1/EladriEmulator-web/releases/download/games/Gran.Turismo.2.USA.Simulation.Mode.v1.2.bin', 'psx')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/b/b5/Gran_Turismo_2_Coverart.png" alt="GT2">
+                <div class="game-info">
+                    <h4>Gran Turismo 2</h4>
+                    <p>Simulation Mode v1.2</p>
+                    <span class="game-tag">PlayStation 1</span>
+                </div>
+            </div>
+
+            <!-- Spider-Man -->
+            <div class="game-card" onclick="cargarJuegoPredescargado('https://github.com/Eladri1/EladriEmulator-web/releases/download/games/Spider-Man.bin', 'psx')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/8/82/Spider-Man_%282000_video_game%29_cover.jpg" alt="Spider-Man">
+                <div class="game-info">
+                    <h4>Spider-Man</h4>
+                    <p>PS1 (2000)</p>
+                    <span class="game-tag">PlayStation 1</span>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <h1 id="titulo-principal">Emulador web de Sr. Croquetas 🕹️</h1>
-    <p id="subtitulo">Selecciona la plataforma a emular</p>
+    <p id="subtitulo">Selecciona la plataforma a emular o abre el panel lateral</p>
     
     <div id="main-menu">
-        <div class="console-card card-psx" onclick="abrirCarga('psx', '.bin,.img,.chd,.iso', 'PlayStation 1')">
+        <div class="console-card card-psx" onclick="abrirCarga('psx', '.bin,.img,.chd,.iso,.cue', 'PlayStation 1')">
             <img src="ps1.png" alt="PlayStation">
             <h3>PlayStation 1</h3>
         </div>
@@ -151,7 +218,7 @@
         }
 
         function cerrarModal() {
-            ventana.style.right = '-320px';
+            ventana.style.right = '-380px';
             overlay.style.opacity = '0';
             setTimeout(() => {
                 overlay.style.display = 'none';
@@ -182,6 +249,31 @@
             romSelector.value = '';
         }
 
+        // Cargar juegos predescargados
+        function cargarJuegoPredescargado(urlDelJuego, nucleo) {
+            cerrarModal(); 
+            
+            document.getElementById('btn-abrir-modal').style.display = 'none';
+            mainMenu.style.display = 'none';
+            uploadScreen.style.display = 'none';
+            document.getElementById('titulo-principal').style.display = 'none';
+            subtitulo.style.display = 'none';
+            
+            emuContainer.style.display = 'block';
+            emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
+            
+            window.EJS_player = '#game'; 
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
+            window.EJS_gameUrl = urlDelJuego; 
+            window.EJS_core = nucleo; 
+            window.EJS_startOnLoaded = true;
+            
+            const script = document.createElement('script'); 
+            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; 
+            document.body.appendChild(script);
+        }
+
+        // Subida manual
         romSelector.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -189,14 +281,20 @@
             document.getElementById('titulo-principal').style.display = 'none';
             emuContainer.style.display = 'block';
             emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
+            
             const tRomUrl = URL.createObjectURL(file);
-            window.EJS_player = '#game'; window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; window.EJS_gameUrl = tRomUrl; window.EJS_startOnLoaded = true;
+            window.EJS_player = '#game'; 
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
+            window.EJS_gameUrl = tRomUrl; 
+            window.EJS_startOnLoaded = true;
             
             if (consolaActiva === 'psx') window.EJS_core = 'psx';
             else if (consolaActiva === 'n64') window.EJS_core = 'n64';
             else if (consolaActiva === 'nds') window.EJS_core = 'nds';
             
-            const script = document.createElement('script'); script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; document.body.appendChild(script);
+            const script = document.createElement('script'); 
+            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; 
+            document.body.appendChild(script);
         });
     </script>
 </body>
