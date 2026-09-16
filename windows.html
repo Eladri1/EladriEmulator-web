@@ -20,7 +20,6 @@
         h1 { color: #ffffff; margin-bottom: 5px; font-size: 26px; font-weight: 800; text-shadow: 0 0 10px var(--color-sombra); }
         #subtitulo { color: #aaaaaa; margin-bottom: 25px; font-size: 15px; }
 
-        /* --- PANTALLA DE CARGA --- */
         #upload-screen {
             display: flex; flex-direction: column; align-items: center; background: #16161a;
             padding: 40px; border: 2px dashed var(--color-acento); border-radius: 12px;
@@ -42,7 +41,6 @@
         }
         .btn-volver:hover { border-color: var(--color-acento); box-shadow: 0 0 15px var(--color-sombra); }
 
-        /* --- CONTENEDOR EMULADOR V86 --- */
         #emulator-container {
             width: 800px; height: 600px; max-width: 95vw; max-height: 80vh;
             display: none; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9);
@@ -65,13 +63,13 @@
     <div id="upload-screen">
         <h2 style="margin-top:0; font-size:20px; color:#fff;">Cargar disco de Windows 95</h2>
         <p style="font-size:13px; color:#aaa; line-height: 1.4;">
-            Selecciona tu archivo de disco virtual <b>(.img)</b> para v86.
+            Selecciona tu archivo <b>.img</b> y arranca el sistema.
         </p>
         <label class="upload-btn">
-            Seleccionar win95.img
+            Seleccionar archivo .img
             <input type="file" id="hda-selector" accept=".img">
         </label>
-        <div id="loading-msg">Cargando motor WebAssembly y BIOS... Un momento.</div>
+        <div id="loading-msg">Montando disco duro virtual... Arrancando sistema.</div>
     </div>
 
     <div id="emulator-container">
@@ -98,34 +96,29 @@
             hdaSelector.parentElement.style.opacity = '0.5';
             hdaSelector.disabled = true;
 
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const buffer = evt.target.result;
+            uploadScreen.style.display = 'none';
+            tituloPrincipal.style.display = 'none';
+            subtitulo.style.display = 'none';
+            emuContainer.style.display = 'block';
 
-                uploadScreen.style.display = 'none';
-                tituloPrincipal.style.display = 'none';
-                subtitulo.style.display = 'none';
-                emuContainer.style.display = 'block';
-
-                window.emulator = new V86({
-                    screen_container: document.getElementById("screen_container"),
-                    // ¡AQUÍ ESTABA EL TRUCO! Faltaba enlazar el .wasm del CDN
-                    wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
-                    bios: {
-                        url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/seabios.bin",
-                    },
-                    vga_bios: {
-                        url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/vgabios.bin",
-                    },
-                    hda: {
-                        buffer: buffer,
-                    },
-                    memory_size: 128 * 1024 * 1024,
-                    vga_memory_size: 8 * 1024 * 1024,
-                    autostart: true,
-                });
-            };
-            reader.readAsArrayBuffer(file);
+            // Pasamos el archivo directamente al objeto de configuración de v86
+            window.emulator = new V86({
+                screen_container: document.getElementById("screen_container"),
+                wasm_path: "https://cdn.jsdelivr.net/gh/copy/v86@master/build/v86.wasm",
+                bios: {
+                    url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/seabios.bin",
+                },
+                vga_bios: {
+                    url: "https://cdn.jsdelivr.net/gh/copy/v86@master/bios/vgabios.bin",
+                },
+                hda: {
+                    async: true,
+                    file: file, // v86 lee el archivo nativamente sin bloquear el navegador
+                },
+                memory_size: 128 * 1024 * 1024,
+                vga_memory_size: 8 * 1024 * 1024,
+                autostart: true,
+            });
         });
     </script>
 </body>
