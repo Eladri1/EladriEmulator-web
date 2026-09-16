@@ -251,27 +251,34 @@
 
         // Cargar juegos predescargados
         function cargarJuegoPredescargado(urlDelJuego, nucleo) {
-            cerrarModal(); 
-            
-            document.getElementById('btn-abrir-modal').style.display = 'none';
-            mainMenu.style.display = 'none';
-            uploadScreen.style.display = 'none';
-            document.getElementById('titulo-principal').style.display = 'none';
-            subtitulo.style.display = 'none';
-            
-            emuContainer.style.display = 'block';
-            emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
-            
-            window.EJS_player = '#game'; 
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
-            window.EJS_gameUrl = urlDelJuego; 
-            window.EJS_core = nucleo; 
-            window.EJS_startOnLoaded = true;
-            
-            const script = document.createElement('script'); 
-            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; 
-            document.body.appendChild(script);
-        }
+    cerrarModal(); 
+    
+    document.getElementById('btn-abrir-modal').style.display = 'none';
+    mainMenu.style.display = 'none';
+    uploadScreen.style.display = 'none';
+    document.getElementById('titulo-principal').style.display = 'none';
+    subtitulo.style.display = 'none';
+    
+    emuContainer.style.display = 'block';
+    emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
+    
+    window.EJS_player = '#game'; 
+    window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
+    
+    // Si la URL es un enlace web (GitHub Releases), pasa por el proxy CORS
+    if (urlDelJuego.startsWith('http')) {
+        window.EJS_gameUrl = 'https://corsproxy.io/?' + encodeURIComponent(urlDelJuego);
+    } else {
+        window.EJS_gameUrl = urlDelJuego;
+    }
+
+    window.EJS_core = nucleo; 
+    window.EJS_startOnLoaded = true;
+    
+    const script = document.createElement('script'); 
+    script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; 
+    document.body.appendChild(script);
+}
 
         // Subida manual
         romSelector.addEventListener('change', function(e) {
