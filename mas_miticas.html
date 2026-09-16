@@ -118,7 +118,6 @@
         function abrirCarga(plataforma, extensiones, nombre, color) {
             consolaActiva = plataforma;
             
-            // Cambiamos el color de fondo para que pegue con la consola
             root.style.setProperty('--bg-general', `linear-gradient(135deg, ${color}33 0%, #000000 100%)`);
             root.style.setProperty('--color-acento', color);
             root.style.setProperty('--color-sombra', `${color}66`);
@@ -134,7 +133,6 @@
         }
 
         function volverMenu() {
-            // Restauramos colores originales
             root.style.setProperty('--bg-general', 'linear-gradient(3deg, #0b0b10 0%, #000000 100%)');
             root.style.setProperty('--color-acento', '#ff9900');
             root.style.setProperty('--color-sombra', 'rgba(255, 153, 0, 0.3)');
@@ -161,12 +159,12 @@
             window.EJS_gameUrl = tRomUrl;
             window.EJS_startOnLoaded = true;
             
-            // Asignación de los núcleos "Todo en 1" correspondientes
-            if (consolaActiva === 'arcade') window.EJS_core = 'arcade';
+            // Asignación de núcleos corregida
+            if (consolaActiva === 'arcade') window.EJS_core = 'mame2003plus';
             else if (consolaActiva === 'snes') window.EJS_core = 'snes';
-            else if (consolaActiva === 'atari') window.EJS_core = 'atari2600'; // Funciona guay para Atari en general
-            else if (consolaActiva === 'gameboy') window.EJS_core = 'gba'; // GBA emula GB, GBC y GBA
-            else if (consolaActiva === 'sega') window.EJS_core = 'segaMD'; // segaMD emula Mega Drive y Master System
+            else if (consolaActiva === 'atari') window.EJS_core = 'atari2600';
+            else if (consolaActiva === 'gameboy') window.EJS_core = 'gba';
+            else if (consolaActiva === 'sega') window.EJS_core = 'segaMD';
             
             const script = document.createElement('script');
             script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
