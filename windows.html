@@ -6,6 +6,36 @@
   <title>Windows 95 - Emulador</title>
   <meta name="description" content="Emulador de Windows 95 en el navegador. Carga tu propia imagen .img.">
 
+  <script>
+    /* Desbloqueo de Web Audio: algunos navegadores mantienen el audio
+       suspendido hasta una interacción del usuario. Registramos los
+       AudioContext que cree v86 y los reanudamos tras un clic/toque. */
+    (() => {
+      const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
+      const contexts = new Set();
+      if (!NativeAudioContext) return;
+
+      const WrappedAudioContext = function(...args) {
+        const context = new NativeAudioContext(...args);
+        contexts.add(context);
+        return context;
+      };
+      WrappedAudioContext.prototype = NativeAudioContext.prototype;
+      window.AudioContext = WrappedAudioContext;
+      if ("webkitAudioContext" in window) window.webkitAudioContext = WrappedAudioContext;
+
+      window.__resumeV86Audio = async function() {
+        let active = false;
+        for (const context of contexts) {
+          try {
+            if (context.state === "suspended") await context.resume();
+            if (context.state === "running") active = true;
+          } catch (_) {}
+        }
+        return active;
+      };
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/v86@0.5.461/build/libv86.js"></script>
 
   <style>
@@ -404,18 +434,35 @@
       image-rendering: auto;
     }
 
-    /* Pantalla completa de verdad: sin respetar el aspect-ratio del marco. */
+    /* Pantalla completa: el marco ocupa todo el viewport, pero la pantalla
+       del PC mantiene exactamente la relación elegida (4:3 o 16:9). */
     #screen-wrap:fullscreen {
       width: 100vw;
       height: 100vh;
       aspect-ratio: auto;
       border: 0;
       background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #screen-wrap:fullscreen #screen_container {
-      width: 100vw;
-      height: 100vh;
+      width: min(100vw, calc(100vh * 4 / 3));
+      height: min(100vh, calc(100vw * 3 / 4));
+      margin: auto;
+    }
+
+    #screen-wrap.wide:fullscreen #screen_container {
+      width: min(100vw, calc(100vh * 16 / 9));
+      height: min(100vh, calc(100vw * 9 / 16));
+    }
+
+    /* Ocultar el cursor en todo el modo pantalla completa. ESC sigue siendo
+       el atajo del navegador para salir. */
+    body.fullscreen-emulator,
+    body.fullscreen-emulator * {
+      cursor: none !important;
     }
 
     #screen_container > div {
@@ -606,6 +653,7 @@
             <button id="pause" class="action" type="button" disabled>Pausar</button>
             <button id="reset" class="action" type="button" disabled>Reiniciar</button>
             <button id="fullscreen" class="action" type="button" disabled>Pantalla completa</button>
+            <button id="sound" class="action" type="button" disabled>🔊 Activar sonido</button>
             <button id="stop" class="action" type="button" disabled>Apagar</button>
           </div>
 
@@ -671,6 +719,7 @@
     <div class="statusbar">
       <div class="cell">Listo</div>
       <div class="cell" id="statusFile">Sin disco</div>
+      <div class="cell">Audio: <span id="audioState">esperando</span></div>
       <div class="cell" style="margin-left:auto;">Windows 95</div>
     </div>
   </div>
@@ -703,7 +752,9 @@
     const pauseBtn = $("pause");
     const resetBtn = $("reset");
     const fullscreenBtn = $("fullscreen");
+    const soundBtn = $("sound");
     const stopBtn = $("stop");
+    const audioState = $("audioState");
 
     function setStatus(text, kind = "") {
       status.textContent = text;
@@ -716,6 +767,7 @@
       pauseBtn.disabled = !hasEmulator;
       resetBtn.disabled = !hasEmulator;
       fullscreenBtn.disabled = !hasEmulator;
+      soundBtn.disabled = !hasEmulator;
       stopBtn.disabled = !hasEmulator;
       $("menuRestart").disabled = !hasEmulator;
       $("menuPowerOff").disabled = !hasEmulator;
@@ -727,6 +779,18 @@
       screenWrap.classList.toggle("wide", value === "16:9");
       $("check43").textContent = value === "4:3" ? "✓" : "";
       $("check169").textContent = value === "16:9" ? "✓" : "";
+      updateFullscreenAspect();
+    }
+
+    function updateFullscreenAspect() {
+      if (document.fullscreenElement !== screenWrap) return;
+      const wide = $("aspectRatio").value === "16:9";
+      screenContainer.style.width = wide
+        ? "min(100vw, calc(100vh * 16 / 9))"
+        : "min(100vw, calc(100vh * 4 / 3))";
+      screenContainer.style.height = wide
+        ? "min(100vh, calc(100vw * 9 / 16))"
+        : "min(100vh, calc(100vw * 3 / 4))";
     }
 
     function applyZoom(value) {
@@ -736,6 +800,18 @@
       $("check100").textContent = zoom === 100 ? "✓" : "";
       $("check125").textContent = zoom === 125 ? "✓" : "";
       $("check150").textContent = zoom === 150 ? "✓" : "";
+    }
+
+    async function unlockAudio(showStatus = true) {
+      try {
+        const active = window.__resumeV86Audio ? await window.__resumeV86Audio() : false;
+        audioState.textContent = active ? "activo" : "esperando";
+        if (active && showStatus && emulator) setStatus("Audio activado.", "ok");
+        return active;
+      } catch (_) {
+        audioState.textContent = "esperando";
+        return false;
+      }
     }
 
     function clearScreen() {
@@ -756,6 +832,7 @@
       try { emulator.destroy(); } catch (_) {}
       emulator = null;
       running = false;
+      audioState.textContent = "apagado";
       clearScreen();
       overlay.classList.remove("hidden");
       updateButtons();
@@ -781,11 +858,14 @@
           bios: { url: BIOS_URL },
           vga_bios: { url: VGA_BIOS_URL },
           acpi: false,
+          disable_speaker: false,
           boot_order: 0x132,
           hda: { buffer: selectedBuffer },
           autostart: true
         });
 
+        audioState.textContent = "intentando…";
+        unlockAudio(false);
         running = true;
         updateButtons();
 
@@ -1003,6 +1083,24 @@
       }
     });
 
+    soundBtn.addEventListener("click", async function() {
+      const active = await unlockAudio(true);
+      if (!active) {
+        setStatus("El navegador no ha activado todavía el audio. Haz clic dentro de Windows 95 y prueba otra vez.", "error");
+      }
+    });
+
+    /* El primer toque/clic tras arrancar también sirve para desbloquear audio. */
+    document.addEventListener("pointerdown", function() {
+      if (emulator) unlockAudio(false);
+    }, { capture: true });
+
+    document.addEventListener("fullscreenchange", function() {
+      const full = document.fullscreenElement === screenWrap;
+      document.body.classList.toggle("fullscreen-emulator", full);
+      updateFullscreenAspect();
+    });
+
     document.addEventListener("keydown", async function(event) {
       if (event.ctrlKey && event.key.toLowerCase() === "o") {
         event.preventDefault();
@@ -1030,6 +1128,7 @@
 
     applyAspectRatio("4:3");
     applyZoom(100);
+    audioState.textContent = "esperando";
     updateButtons();
   </script>
 </body>
