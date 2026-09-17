@@ -365,8 +365,13 @@
             window.EJS_player = '#game'; 
             window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
             
-            // Forza el proxy de CORS para evitar la redirección bloqueada de Archive.org
-            window.EJS_gameUrl = 'https://corsproxy.io/?' + encodeURIComponent(urlDelJuego);
+            // Usa el endpoint CORS de Internet Archive para evitar el bloqueo por CORS
+            // Convierte https://archive.org/download/... en https://cors.archive.org/cors/...
+            const urlConCors = urlDelJuego.replace(
+                'https://archive.org/download/',
+                'https://cors.archive.org/cors/'
+            );
+            window.EJS_gameUrl = urlConCors;
 
             window.EJS_core = nucleo; 
             window.EJS_startOnLoaded = true;
