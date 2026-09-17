@@ -20,7 +20,16 @@
         h1 { color: var(--color-acento); margin-bottom: 5px; font-size: 28px; text-shadow: 0 0 10px var(--color-sombra); transition: color 0.3s, text-shadow 0.3s; font-weight: 800; }
         #subtitulo { color: var(--color-acento); margin-bottom: 30px; font-size: 16px; opacity: 0.8; transition: color 0.3s; }
 
-        /* --- BOTÓN PANEL EXTRA --- */
+        /* --- BOTÓN DESCARGAR JUEGOS (ARRIBA IZQUIERDA) --- */
+        #btn-descargar-juegos {
+            position: absolute; top: 20px; left: 20px; background: #16161a; border: 2px solid #333; color: #fff;
+            padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: all 0.2s; z-index: 10; font-family: inherit; font-size: 14px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        #btn-descargar-juegos:hover { border-color: #00e5ff; box-shadow: 0 0 15px rgba(0,229,255,0.3); color: #00e5ff; }
+
+        /* --- BOTÓN PANEL EXTRA (ARRIBA DERECHA) --- */
         #btn-abrir-modal {
             position: absolute; top: 20px; right: 20px; background: #16161a; border: 2px solid #333; color: #fff;
             padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
@@ -71,23 +80,6 @@
         .link-mas-miticas { background: #ff9900; color: white; }
         .link-mas-miticas:hover { background: #e68a00; box-shadow: 0 0 10px rgba(255,153,0,0.3); }
 
-        /* --- TARJETAS DE JUEGOS PREDESCARGADOS --- */
-        .game-card {
-            background: #1a1a22; border: 1px solid #282835; border-radius: 10px; padding: 10px;
-            display: flex; align-items: center; gap: 12px; cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .game-card:hover {
-            transform: translateX(-4px); border-color: #00ff66; background: #22222d;
-        }
-        .game-card img {
-            width: 55px; height: 75px; object-fit: cover; border-radius: 6px; background: #000;
-        }
-        .game-info { flex: 1; }
-        .game-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #fff; font-weight: 700; }
-        .game-info p { margin: 0; font-size: 12px; color: #aaa; }
-        .game-tag { display: inline-block; background: rgba(255,255,255,0.1); color: #ccc; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-top: 6px; }
-
         /* --- MENÚ PRINCIPAL --- */
         #main-menu { display: flex; gap: 30px; }
         .console-card { background: #161616; border: 2px solid #333333; border-radius: 15px; width: 200px; height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s, background 0.3s; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7); }
@@ -112,7 +104,11 @@
 </head>
 <body>
 
-    <button id="btn-abrir-modal" onclick="abrirModal()">🛠️ Panel Extra / Juegos</button>
+    <!-- BOTÓN DESCARGAR JUEGOS (ARRIBA IZQUIERDA) -->
+    <a id="btn-descargar-juegos" href="https://github.com/Eladri1/EladriEmulator-web/releases/tag/games" target="_blank">📥 Descargar juegos</a>
+
+    <!-- BOTÓN PANEL EXTRA (ARRIBA DERECHA) -->
+    <button id="btn-abrir-modal" onclick="abrirModal()">🛠️ Panel Extra</button>
 
     <div id="modal-overlay" onclick="cerrarModal()"></div>
     <div id="modal-ventana">
@@ -124,158 +120,13 @@
             <a href="windows.html" class="modal-link link-windows">💻 Emulador de Windows</a>
             <a href="mas_miticas.html" class="modal-link link-mas-miticas">🕹️ Las Más Míticas (2D)</a>
         </div>
-
-        <div class="modal-seccion" style="margin-top: 15px;">
-            <h3>🎮 Catálogo PS1 (Archive.org CHD)</h3>
-            
-            <!-- Crash Bandicoot 1 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Crash%20Bandicoot%20%28Europe%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/4/44/Crash_Bandicoot_Cover.png" alt="Crash 1">
-                <div class="game-info">
-                    <h4>Crash Bandicoot</h4>
-                    <p>PS1 (Europa - CHD)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Crash Bandicoot 2 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Crash%20Bandicoot%202%20-%20Cortex%20Strikes%20Back%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/c/cd/Crash_Bandicoot_2_Cortex_Strikes_Back_PlayStation_game_cover.jpg" alt="Crash 2">
-                <div class="game-info">
-                    <h4>Crash Bandicoot 2</h4>
-                    <p>Cortex Strikes Back (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Crash Bandicoot 3 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Crash%20Bandicoot%203%20-%20Warped%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Crash_Bandicoot_3_Warped_Front_Cover.png" alt="Crash 3">
-                <div class="game-info">
-                    <h4>Crash Bandicoot 3</h4>
-                    <p>Warped (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- CTR -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/CTR%20-%20Crash%20Team%20Racing%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%2CNl%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/d/dc/CTR_-_Crash_Team_Racing_Coverart.png" alt="CTR">
-                <div class="game-info">
-                    <h4>Crash Team Racing</h4>
-                    <p>CTR (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Spyro 1 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Spyro%20the%20Dragon%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/5/53/Spyro_the_Dragon_Coverart.png" alt="Spyro 1">
-                <div class="game-info">
-                    <h4>Spyro the Dragon</h4>
-                    <p>PS1 (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Spyro 2 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Spyro%202%20-%20Gateway%20to%20Glimmer%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/2/22/Spyro_2_-_Gateway_to_Glimmer_Coverart.png" alt="Spyro 2">
-                <div class="game-info">
-                    <h4>Spyro 2</h4>
-                    <p>Gateway to Glimmer (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Spyro 3 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Spyro%20-%20Year%20of%20the%20Dragon%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/5/5a/Spyro_-_Year_of_the_Dragon_Coverart.png" alt="Spyro 3">
-                <div class="game-info">
-                    <h4>Spyro 3</h4>
-                    <p>Year of the Dragon (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Gran Turismo -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Gran%20Turismo%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/1/1c/Gran_Turismo_1_Coverart.png" alt="GT1">
-                <div class="game-info">
-                    <h4>Gran Turismo</h4>
-                    <p>PS1 (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Gran Turismo 2 -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Gran%20Turismo%202%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29%20%28Disc%202%29%20%28Gran%20Turismo%20Mode%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/b/b5/Gran_Turismo_2_Coverart.png" alt="GT2">
-                <div class="game-info">
-                    <h4>Gran Turismo 2</h4>
-                    <p>GT Mode (Disco 2 - Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Metal Gear Solid (Disc 1) -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Metal%20Gear%20Solid%20%28Europe%29%20%28Disc%201%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/3/33/Metal_Gear_Solid_cover_art.png" alt="MGS1">
-                <div class="game-info">
-                    <h4>Metal Gear Solid</h4>
-                    <p>Disco 1 (Europa)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Metal Gear Solid (Disc 2) -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Metal%20Gear%20Solid%20%28Europe%29%20%28Disc%202%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/3/33/Metal_Gear_Solid_cover_art.png" alt="MGS2">
-                <div class="game-info">
-                    <h4>Metal Gear Solid</h4>
-                    <p>Disco 2 (Europa)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Tomb Raider -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Tomb%20Raider%20%28Europe%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/f/f1/Tomb_Raider_1996_cover_art.jpg" alt="Tomb Raider">
-                <div class="game-info">
-                    <h4>Tomb Raider</h4>
-                    <p>PS1 (Europa)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Resident Evil -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Resident%20Evil%20%28Europe%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/a/a6/Resident_Evil_1_cover.png" alt="RE1">
-                <div class="game-info">
-                    <h4>Resident Evil</h4>
-                    <p>PS1 (Europa)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-            <!-- Silent Hill -->
-            <div class="game-card" onclick="cargarJuegoPredescargado('https://archive.org/download/chd_psx_eur/CHD-PSX-EUR/Silent%20Hill%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.chd', 'psx')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/9/95/Silent_Hill_1_cover.png" alt="Silent Hill">
-                <div class="game-info">
-                    <h4>Silent Hill</h4>
-                    <p>PS1 (Español)</p>
-                    <span class="game-tag">PlayStation 1</span>
-                </div>
-            </div>
-
-        </div>
     </div>
 
     <h1 id="titulo-principal">Emulador web de Sr. Croquetas 🕹️</h1>
-    <p id="subtitulo">Selecciona la plataforma a emular o abre el panel lateral</p>
+    <p id="subtitulo">Selecciona la plataforma a emular o descarga juegos desde arriba</p>
     
     <div id="main-menu">
-        <div class="console-card card-psx" onclick="abrirCarga('psx', '.bin,.img,.chd,.iso,.cue', 'PlayStation 1')">
+        <div class="console-card card-psx" onclick="abrirCarga('psx', '.chd,.bin,.img,.iso,.cue,.pbp', 'PlayStation 1')">
             <img src="ps1.png" alt="PlayStation">
             <h3>PlayStation 1</h3>
         </div>
@@ -306,6 +157,8 @@
         const emuContainer = document.getElementById('emulator-container');
         const subtitulo = document.getElementById('subtitulo');
         const romSelector = document.getElementById('rom-selector');
+        const btnDescargar = document.getElementById('btn-descargar-juegos');
+        const btnModal = document.getElementById('btn-abrir-modal');
         const root = document.documentElement;
         let consolaActiva = "";
 
@@ -327,7 +180,9 @@
 
         function abrirCarga(plataforma, extensiones, nombre) {
             consolaActiva = plataforma;
-            document.getElementById('btn-abrir-modal').style.display = 'none';
+            btnModal.style.display = 'none';
+            btnDescargar.style.display = 'none';
+            
             if (plataforma === 'psx') { root.style.setProperty('--bg-general', 'linear-gradient(135deg, #002561 0%, #000000 100%)'); root.style.setProperty('--color-acento', '#0072ce'); }
             else if (plataforma === 'n64') { root.style.setProperty('--bg-general', 'linear-gradient(135deg, #7a0006 0%, #000000 100%)'); root.style.setProperty('--color-acento', '#e60012'); }
             else if (plataforma === 'nds') { root.style.setProperty('--bg-general', 'linear-gradient(135deg, #004b57 0%, #000000 100%)'); root.style.setProperty('--color-acento', '#00e5ff'); }
@@ -345,52 +200,20 @@
             uploadScreen.style.display = 'none';
             mainMenu.style.display = 'flex';
             subtitulo.style.display = 'block';
-            document.getElementById('btn-abrir-modal').style.display = 'block';
+            btnModal.style.display = 'block';
+            btnDescargar.style.display = 'flex';
             romSelector.value = '';
         }
 
-        // Cargar juegos predescargados con Bypass CORS obligatorio
-        function cargarJuegoPredescargado(urlDelJuego, nucleo) {
-            cerrarModal(); 
-            
-            document.getElementById('btn-abrir-modal').style.display = 'none';
-            mainMenu.style.display = 'none';
-            uploadScreen.style.display = 'none';
-            document.getElementById('titulo-principal').style.display = 'none';
-            subtitulo.style.display = 'none';
-            
-            emuContainer.style.display = 'block';
-            emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
-            
-            window.EJS_player = '#game'; 
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
-            
-            // Internet Archive necesita su ruta /cors/ para que el archivo
-            // pueda ser solicitado desde una web alojada en otro dominio.
-            let urlConCors = urlDelJuego;
-            if (urlDelJuego.startsWith('https://archive.org/download/')) {
-                urlConCors = urlDelJuego.replace(
-                    'https://archive.org/download/',
-                    'https://cors.archive.org/cors/'
-                );
-            }
-
-            window.EJS_gameUrl = urlConCors;
-            window.EJS_core = nucleo;
-            window.EJS_gameName = urlDelJuego.split('/').pop() || 'PS1';
-            window.EJS_startOnLoaded = true;
-            
-            const script = document.createElement('script'); 
-            script.src = "https://cdn.emulatorjs.org/stable/data/loader.js"; 
-            document.body.appendChild(script);
-        }
-
-        // Subida manual
+        // Carga de ROM local
         romSelector.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
             uploadScreen.style.display = 'none';
             document.getElementById('titulo-principal').style.display = 'none';
+            btnDescargar.style.display = 'none';
+            btnModal.style.display = 'none';
+            
             emuContainer.style.display = 'block';
             emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
             
