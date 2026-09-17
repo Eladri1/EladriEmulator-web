@@ -6,37 +6,16 @@
   <title>Windows 95 - Emulador</title>
   <meta name="description" content="Emulador de Windows 95 en el navegador. Carga tu propia imagen .img.">
 
-  <script>
-    /* Desbloqueo de Web Audio: algunos navegadores mantienen el audio
-       suspendido hasta una interacción del usuario. Registramos los
-       AudioContext que cree v86 y los reanudamos tras un clic/toque. */
-    (() => {
-      const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
-      const contexts = new Set();
-      if (!NativeAudioContext) return;
-
-      const WrappedAudioContext = function(...args) {
-        const context = new NativeAudioContext(...args);
-        contexts.add(context);
-        return context;
-      };
-      WrappedAudioContext.prototype = NativeAudioContext.prototype;
-      window.AudioContext = WrappedAudioContext;
-      if ("webkitAudioContext" in window) window.webkitAudioContext = WrappedAudioContext;
-
-      window.__resumeV86Audio = async function() {
-        let active = false;
-        for (const context of contexts) {
-          try {
-            if (context.state === "suspended") await context.resume();
-            if (context.state === "running") active = true;
-          } catch (_) {}
-        }
-        return active;
-      };
-    })();
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/v86@0.5.461/build/libv86.js"></script>
+
+  <!-- Sonido de arranque de Windows 95.
+       Fuente remota: archivo usado por el proyecto Chicago95. -->
+  <audio id="win95Startup" preload="auto">
+    <source
+      src="https://raw.githubusercontent.com/grassmunk/Chicago95/master/Extras/Microsoft%20Windows%2095%20Startup%20Sound.ogg"
+      type="audio/ogg">
+  </audio>
+
 
   <style>
     * { box-sizing: border-box; }
@@ -135,6 +114,72 @@
       background: #c0c0c0;
       font-size: 12px;
       user-select: none;
+    }
+
+    /* Control de volumen con el mismo acabado 3D de Windows 95 */
+    .volume-slot {
+      margin-left: auto;
+      width: 100px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .volume-slider {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 94px;
+      height: 16px;
+      margin: 0;
+      padding: 0;
+      background: #c0c0c0;
+      border: 2px inset #c0c0c0;
+      box-sizing: border-box;
+      cursor: default;
+      outline: none;
+    }
+
+    .volume-slider::-webkit-slider-runnable-track {
+      height: 10px;
+      background: #c0c0c0;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 10px;
+      height: 14px;
+      margin-top: -2px;
+      background: #c0c0c0;
+      border: 2px outset #c0c0c0;
+      box-sizing: border-box;
+    }
+
+    .volume-slider::-moz-range-track {
+      height: 10px;
+      background: #c0c0c0;
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 10px;
+      height: 14px;
+      background: #c0c0c0;
+      border: 2px outset #c0c0c0;
+      border-radius: 0;
+      box-sizing: border-box;
+    }
+
+    .volume-slider:focus {
+      outline: 1px dotted #000;
+      outline-offset: 1px;
+    }
+
+    @media (max-width: 760px) {
+      .menu-bar { gap: 8px; padding-inline: 4px; }
+      .volume-slot { width: 82px; }
+      .volume-slider { width: 76px; }
     }
 
     .menu-item {
@@ -621,6 +666,9 @@
           <button class="menu-entry" id="menuAbout">Acerca de Windows 95</button>
         </div>
       </div>
+      <div class="volume-slot" title="Volumen">
+        <input id="volumeRange" class="volume-slider" type="range" min="0" max="100" value="100" aria-label="Volumen">
+      </div>
     </div>
 
     <div class="content">
@@ -655,7 +703,6 @@
             <button id="pause" class="action" type="button" disabled>Pausar</button>
             <button id="reset" class="action" type="button" disabled>Reiniciar</button>
             <button id="fullscreen" class="action" type="button" disabled>Pantalla completa</button>
-            <button id="sound" class="action" type="button" disabled>🔊 Activar sonido</button>
             <button id="stop" class="action" type="button" disabled>Apagar</button>
           </div>
 
@@ -696,7 +743,7 @@
         <div style="padding:8px;font-weight:700;color:#fff;background:#000080;">Ayuda de Windows 95</div>
         <div style="padding:10px;line-height:1.5;">
           <b>Controles</b><br>
-          Haz clic dentro de la pantalla para usar el ratón y el teclado.<br><br>
+          Haz clic dentro de la pantalla para usar el ratón y el teclado.<br>El sonido de inicio se reproduce al arrancar Windows 95.<br><br>
           <b>Atajos</b><br>Ctrl+O = abrir .img · F5 = reiniciar · F11 = pantalla completa<br><br>
           <button class="action" id="closeHelp" type="button">Aceptar</button>
         </div>
@@ -721,7 +768,7 @@
     <div class="statusbar">
       <div class="cell">Listo</div>
       <div class="cell" id="statusFile">Sin disco</div>
-      <div class="cell">Audio: <span id="audioState">esperando</span></div>
+      <div class="cell">Audio: <span id="audioState">sonido de inicio</span></div>
       <div class="cell" style="margin-left:auto;">Windows 95</div>
     </div>
   </div>
@@ -754,9 +801,9 @@
     const pauseBtn = $("pause");
     const resetBtn = $("reset");
     const fullscreenBtn = $("fullscreen");
-    const soundBtn = $("sound");
     const stopBtn = $("stop");
     const audioState = $("audioState");
+    const volumeRange = $("volumeRange");
 
     function setStatus(text, kind = "") {
       status.textContent = text;
@@ -769,7 +816,6 @@
       pauseBtn.disabled = !hasEmulator;
       resetBtn.disabled = !hasEmulator;
       fullscreenBtn.disabled = !hasEmulator;
-      soundBtn.disabled = !hasEmulator;
       stopBtn.disabled = !hasEmulator;
       $("menuRestart").disabled = !hasEmulator;
       $("menuPowerOff").disabled = !hasEmulator;
@@ -804,15 +850,26 @@
       $("check150").textContent = zoom === 150 ? "✓" : "";
     }
 
-    async function unlockAudio(showStatus = true) {
+    function playWindows95StartupSound() {
+      const audio = $("win95Startup");
+      if (!audio) return;
+
       try {
-        const active = window.__resumeV86Audio ? await window.__resumeV86Audio() : false;
-        audioState.textContent = active ? "activo" : "esperando";
-        if (active && showStatus && emulator) setStatus("Audio activado.", "ok");
-        return active;
-      } catch (_) {
-        audioState.textContent = "esperando";
-        return false;
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = Number(volumeRange?.value ?? 100) / 100;
+
+        const promise = audio.play();
+
+        if (promise && typeof promise.catch === "function") {
+          promise.catch((error) => {
+            console.warn("No se pudo reproducir el sonido de inicio:", error);
+            $("audioState").textContent = "bloqueado por navegador";
+          });
+        }
+      } catch (error) {
+        console.warn("No se pudo reproducir el sonido de inicio:", error);
+        $("audioState").textContent = "error";
       }
     }
 
@@ -834,7 +891,7 @@
       try { emulator.destroy(); } catch (_) {}
       emulator = null;
       running = false;
-      audioState.textContent = "apagado";
+      audioState.textContent = "sonido de inicio";
       clearScreen();
       overlay.classList.remove("hidden");
       updateButtons();
@@ -860,14 +917,13 @@
           bios: { url: BIOS_URL },
           vga_bios: { url: VGA_BIOS_URL },
           acpi: false,
-          disable_speaker: false,
+          disable_speaker: true,
           boot_order: 0x132,
           hda: { buffer: selectedBuffer },
           autostart: true
         });
 
-        audioState.textContent = "intentando…";
-        unlockAudio(false);
+        audioState.textContent = "sonido de inicio";
         running = true;
         updateButtons();
 
@@ -1006,6 +1062,11 @@
 
     $("menuTips").addEventListener("click", () => openDialog("helpDialog"));
     $("menuAbout").addEventListener("click", () => openDialog("aboutDialog"));
+
+    volumeRange.addEventListener("input", () => {
+      const audio = $("win95Startup");
+      if (audio) audio.volume = Number(volumeRange.value) / 100;
+    });
     $("closeHelp").addEventListener("click", () => $("helpDialog").style.display = "none");
     $("closeAbout").addEventListener("click", () => $("aboutDialog").style.display = "none");
 
@@ -1045,7 +1106,14 @@
       applyAspectRatio(this.value);
     });
 
-    startBtn.addEventListener("click", startEmulator);
+    startBtn.addEventListener("click", async function() {
+      /*
+       * Se reproduce aquí, dentro del gesto del usuario, para que Chrome no
+       * lo bloquee por autoplay. Es SOLO el sonido de arranque de Windows 95.
+       */
+      playWindows95StartupSound();
+      await startEmulator();
+    });
 
     pauseBtn.addEventListener("click", function() {
       if (!emulator) return;
@@ -1148,11 +1216,6 @@
         setStatus("El navegador no ha activado todavía el audio. Haz clic dentro de Windows 95 y prueba otra vez.", "error");
       }
     });
-
-    /* El primer toque/clic tras arrancar también sirve para desbloquear audio. */
-    document.addEventListener("pointerdown", function() {
-      if (emulator) unlockAudio(false);
-    }, { capture: true });
 
     document.addEventListener("fullscreenchange", function() {
       const full = document.fullscreenElement === screenWrap;
