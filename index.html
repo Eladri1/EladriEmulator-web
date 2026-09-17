@@ -363,21 +363,25 @@
             emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
             
             window.EJS_player = '#game'; 
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
             
-            // Usa el endpoint CORS de Internet Archive para evitar el bloqueo por CORS
-            // Convierte https://archive.org/download/... en https://cors.archive.org/cors/...
-            const urlConCors = urlDelJuego.replace(
-                'https://archive.org/download/',
-                'https://cors.archive.org/cors/'
-            );
-            window.EJS_gameUrl = urlConCors;
+            // Internet Archive necesita su ruta /cors/ para que el archivo
+            // pueda ser solicitado desde una web alojada en otro dominio.
+            let urlConCors = urlDelJuego;
+            if (urlDelJuego.startsWith('https://archive.org/download/')) {
+                urlConCors = urlDelJuego.replace(
+                    'https://archive.org/download/',
+                    'https://cors.archive.org/cors/'
+                );
+            }
 
-            window.EJS_core = nucleo; 
+            window.EJS_gameUrl = urlConCors;
+            window.EJS_core = nucleo;
+            window.EJS_gameName = urlDelJuego.split('/').pop() || 'PS1';
             window.EJS_startOnLoaded = true;
             
             const script = document.createElement('script'); 
-            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; 
+            script.src = "https://cdn.emulatorjs.org/stable/data/loader.js"; 
             document.body.appendChild(script);
         }
 
@@ -392,7 +396,7 @@
             
             const tRomUrl = URL.createObjectURL(file);
             window.EJS_player = '#game'; 
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/'; 
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
             window.EJS_gameUrl = tRomUrl; 
             window.EJS_startOnLoaded = true;
             
@@ -401,7 +405,7 @@
             else if (consolaActiva === 'nds') window.EJS_core = 'nds';
             
             const script = document.createElement('script'); 
-            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js"; 
+            script.src = "https://cdn.emulatorjs.org/stable/data/loader.js"; 
             document.body.appendChild(script);
         });
     </script>
