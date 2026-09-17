@@ -1200,14 +1200,12 @@
     });
 
     document.addEventListener("pointerlockchange", function() {
-      // Durante fullscreen no mostramos mensajes ni overlays.
-      // El cursor permanece oculto por el CSS de fullscreen.
-      if (
-        document.fullscreenElement === screenWrap &&
-        $("aspectRatio").value === "4:3"
-      ) {
-        document.body.classList.add("fullscreen-emulator");
-      }
+      // El cursor solo debe ocultarse mientras el emulador siga realmente
+      // en pantalla completa. Al salir, quitamos SIEMPRE la clase para que
+      // el ratón del navegador vuelva a aparecer aunque pointer lock tarde
+      // unas milésimas en liberar el foco.
+      const full = document.fullscreenElement === screenWrap;
+      document.body.classList.toggle("fullscreen-emulator", full);
     });
 
     soundBtn.addEventListener("click", async function() {
@@ -1219,11 +1217,20 @@
 
     document.addEventListener("fullscreenchange", function() {
       const full = document.fullscreenElement === screenWrap;
+
+      // Actualiza el estado visual inmediatamente. Especialmente al salir,
+      // no dejamos la clase de cursor oculto colgada en el <body>.
       document.body.classList.toggle("fullscreen-emulator", full);
       updateFullscreenAspect();
 
-      if (!full && document.pointerLockElement && document.exitPointerLock) {
-        try { document.exitPointerLock(); } catch (_) {}
+      if (!full) {
+        // Libera también pointer lock al salir de fullscreen. El listener de
+        // pointerlockchange vuelve a sincronizar la clase por si el navegador
+        // dispara el evento después de este handler.
+        document.body.classList.remove("fullscreen-emulator");
+        if (document.pointerLockElement && document.exitPointerLock) {
+          try { document.exitPointerLock(); } catch (_) {}
+        }
       }
     });
 
