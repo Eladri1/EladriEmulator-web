@@ -1224,10 +1224,16 @@
       updateFullscreenAspect();
 
       if (!full) {
-        // Libera también pointer lock al salir de fullscreen. El listener de
-        // pointerlockchange vuelve a sincronizar la clase por si el navegador
-        // dispara el evento después de este handler.
+        // Al salir de fullscreen hay que liberar AMBOS bloqueos:
+        // 1) el Pointer Lock del navegador y
+        // 2) el lock_mouse de v86 (si el core lo está usando).
+        // Así el cursor del navegador vuelve a aparecer inmediatamente.
         document.body.classList.remove("fullscreen-emulator");
+
+        if (emulator && typeof emulator.unlock_mouse === "function") {
+          try { emulator.unlock_mouse(); } catch (_) {}
+        }
+
         if (document.pointerLockElement && document.exitPointerLock) {
           try { document.exitPointerLock(); } catch (_) {}
         }
