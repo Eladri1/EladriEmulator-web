@@ -461,7 +461,9 @@
     /* Ocultar el cursor en todo el modo pantalla completa. ESC sigue siendo
        el atajo del navegador para salir. */
     body.fullscreen-emulator,
-    body.fullscreen-emulator * {
+    body.fullscreen-emulator *,
+    #screen-wrap:fullscreen,
+    #screen-wrap:fullscreen * {
       cursor: none !important;
     }
 
@@ -645,7 +647,7 @@
                 <option value="16:9">16:9 (pantalla completa)</option>
               </select>
             </div>
-            <div class="hint" style="margin-top:3px;">16:9 adapta la imagen al marco; puede verse más ancha de lo normal.</div>
+            <div class="hint" style="margin-top:3px;">En fullscreen se conserva la relación elegida. En 4:3 el ratón se captura para que no pueda salir por los bordes.</div>
           </div>
 
           <div class="actions">
@@ -1074,12 +1076,69 @@
       setStatus("Emulador apagado.");
     });
 
+    function lockMouseForClassic43() {
+      if (!emulator || $("aspectRatio").value !== "4:3") return;
+
+      try {
+        // v86 tiene su propio método de captura y es preferible usarlo
+        // para que los movimientos lleguen correctamente al ratón emulado.
+        if (typeof emulator.lock_mouse === "function") {
+          emulator.lock_mouse();
+        } else if (screenWrap.requestPointerLock) {
+          screenWrap.requestPointerLock();
+        }
+      } catch (_) {
+        // El usuario puede volver a intentarlo haciendo clic dentro del emulador.
+      }
+    }
+
     fullscreenBtn.addEventListener("click", async function() {
       try {
-        if (!document.fullscreenElement) await screenWrap.requestFullscreen();
-        else await document.exitFullscreen();
+        if (!document.fullscreenElement) {
+          /*
+           * IMPORTANTE: Pointer Lock se solicita ANTES que Fullscreen.
+           * Algunos navegadores consumen la activación del gesto al entrar
+           * en fullscreen y entonces el bloqueo del ratón deja de poder
+           * solicitarse desde el mismo clic.
+           */
+          if ($("aspectRatio").value === "4:3") {
+            lockMouseForClassic43();
+          }
+
+          if (screenWrap.requestFullscreen) {
+            await screenWrap.requestFullscreen({ navigationUI: "hide" });
+          }
+        } else {
+          await document.exitFullscreen();
+        }
       } catch (_) {
         setStatus("El navegador no permite activar la pantalla completa.", "error");
+      }
+    });
+
+    /*
+     * Si el navegador no hubiera aceptado el lock en el clic del botón,
+     * un clic dentro del emulador (que sí es un gesto del usuario) lo vuelve
+     * a solicitar. Solo se aplica al 4:3 en fullscreen.
+     */
+    screenWrap.addEventListener("click", function() {
+      if (
+        document.fullscreenElement === screenWrap &&
+        $("aspectRatio").value === "4:3" &&
+        emulator
+      ) {
+        lockMouseForClassic43();
+      }
+    });
+
+    document.addEventListener("pointerlockchange", function() {
+      // Durante fullscreen no mostramos mensajes ni overlays.
+      // El cursor permanece oculto por el CSS de fullscreen.
+      if (
+        document.fullscreenElement === screenWrap &&
+        $("aspectRatio").value === "4:3"
+      ) {
+        document.body.classList.add("fullscreen-emulator");
       }
     });
 
@@ -1099,6 +1158,10 @@
       const full = document.fullscreenElement === screenWrap;
       document.body.classList.toggle("fullscreen-emulator", full);
       updateFullscreenAspect();
+
+      if (!full && document.pointerLockElement && document.exitPointerLock) {
+        try { document.exitPointerLock(); } catch (_) {}
+      }
     });
 
     document.addEventListener("keydown", async function(event) {
