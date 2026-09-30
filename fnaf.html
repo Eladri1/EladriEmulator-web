@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FNaF Web Collection 🐻⚡ - Sr. Croquetas</title>
+    <style>
+        :root {
+            --bg-color: #050508;
+            --card-bg: #0f0f15;
+            --accent-red: #ff1e27;
+            --accent-red-glow: rgba(255, 30, 39, 0.5);
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at center, #150507 0%, #000000 100%);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        /* --- BOTÓN VOLVER --- */
+        .header-bar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .btn-volver {
+            background: #121218;
+            border: 2px solid #333;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-volver:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-red-glow);
+        }
+
+        /* --- TÍTULOS --- */
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            margin: 10px 0 5px 0;
+            color: var(--accent-red);
+            text-shadow: 0 0 15px var(--accent-red-glow), 0 0 30px rgba(255, 0, 0, 0.3);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        p.subtitulo {
+            color: #888899;
+            font-size: 14px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        /* --- REJILLA DE JUEGOS --- */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            padding-bottom: 40px;
+        }
+
+        /* --- TARJETA DE JUEGO --- */
+        .game-card {
+            background: var(--card-bg);
+            border: 2px solid #222230;
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-red);
+            box-shadow: 0 10px 25px var(--accent-red-glow);
+        }
+
+        /* Contenedor de la portada (Ratio vertical de SteamGridDB 2:3) */
+        .cover-container {
+            width: 100%;
+            height: 260px;
+            background-color: #000;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cover-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            filter: brightness(0.85);
+        }
+
+        .game-card:hover .cover-container img {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+
+        /* Info del título */
+        .game-details {
+            padding: 12px;
+            background: #0d0d12;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-top: 1px solid #1a1a24;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .game-details h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+            transition: color 0.2s;
+        }
+
+        .game-card:hover .game-details h3 {
+            color: var(--accent-red);
+        }
+
+        .game-details span {
+            font-size: 11px;
+            color: #666677;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <a href="index.html" class="btn-volver">← Menú Principal</a>
+    </div>
+
+    <h1>Five Nights at Freddy's</h1>
+    <p class="subtitulo">Selecciona la noche a la que quieres sobrevivir 🍕</p>
+
+    <div class="games-grid">
+
+        <!-- FNAF 1 -->
+        <a href="fnaf1/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf1.png" alt="FNaF 1">
+            </div>
+            <div class="game-details">
+                <h3>FNaF 1</h3>
+                <span>Freddy Fazbear's Pizza</span>
+            </div>
+        </a>
+
+        <!-- FNAF 2 -->
+        <a href="fnaf2/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf2.png" alt="FNaF 2">
+            </div>
+            <div class="game-details">
+                <h3>FNaF 2</h3>
+                <span>Grand Re-Opening</span>
+            </div>
+        </a>
+
+        <!-- FNAF 3 -->
+        <a href="fnaf3/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf3.png" alt="FNaF 3">
+            </div>
+            <div class="game-details">
+                <h3>FNaF 3</h3>
+                <span>Fazbear's Fright</span>
+            </div>
+        </a>
+
+        <!-- FNAF 4 -->
+        <a href="fnaf4/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf4.png" alt="FNaF 4">
+            </div>
+            <div class="game-details">
+                <h3>FNaF 4</h3>
+                <span>The Final Chapter</span>
+            </div>
+        </a>
+
+        <!-- SISTER LOCATION -->
+        <a href="fnaf-sl/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf-sl.png" alt="Sister Location">
+            </div>
+            <div class="game-details">
+                <h3>Sister Location</h3>
+                <span>Circus Baby's Entertainment</span>
+            </div>
+        </a>
+
+        <!-- PIZZERIA SIMULATOR (FNaF 6) -->
+        <a href="fnaf6/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf6.png" alt="FNaF 6">
+            </div>
+            <div class="game-details">
+                <h3>Pizzeria Simulator</h3>
+                <span>FNaF 6</span>
+            </div>
+        </a>
+
+        <!-- ULTIMATE CUSTOM NIGHT -->
+        <a href="ucn/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/ucn.png" alt="Ultimate Custom Night">
+            </div>
+            <div class="game-details">
+                <h3>Ultimate Custom Night</h3>
+                <span>50 Animatrónicos</span>
+            </div>
+        </a>
+
+        <!-- FNAF WORLD -->
+        <a href="fnaf-world/index.html" class="game-card">
+            <div class="cover-container">
+                <img src="portadas/fnaf-world.png" alt="FNaF World">
+            </div>
+            <div class="game-details">
+                <h3>FNaF World</h3>
+                <span>RPG Special</span>
+            </div>
+        </a>
+
+    </div>
+
+</body>
+</html>
