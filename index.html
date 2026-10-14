@@ -116,18 +116,19 @@
     <div id="modal-ventana">
         <button class="modal-cerrar" onclick="cerrarModal()">✕</button>
         <h2>Menú de Extras</h2>
-        
+
         <div class="modal-seccion">
             <h3>Secciones Especiales</h3>
             <a href="windows.html" class="modal-link link-windows">💻 Emulador de Windows</a>
             <a href="mas_miticas.html" class="modal-link link-mas-miticas">🕹️ Las Más Míticas (2D)</a>
             <a href="fnaf.html" class="modal-link link-fnaf">🐻 Colección de FNaF</a>
+            <a href="biblioteca_juegos_10_portadas.html" class="modal-link link-windows">🎮 ports web</a>
         </div>
     </div>
 
     <h1 id="titulo-principal">Emulador web de Sr. Croquetas 🕹️</h1>
     <p id="subtitulo">Selecciona la plataforma a emular o descarga juegos desde arriba</p>
-    
+
     <div id="main-menu">
         <div class="console-card card-psx" onclick="abrirCarga('psx', '.chd,.bin,.cue,.iso,.img,.pbp,.zip,.7z,.rar', 'PlayStation 1')">
             <img src="ps1.png" alt="PlayStation">
@@ -185,11 +186,11 @@
             consolaActiva = plataforma;
             btnModal.style.display = 'none';
             btnDescargar.style.display = 'none';
-            
+
             if (plataforma === 'psx') { root.style.setProperty('--bg-general', 'linear-gradient(135deg, #002561 0%, #000000 100%)'); root.style.setProperty('--color-acento', '#0072ce'); }
             else if (plataforma === 'n64') { root.style.setProperty('--bg-general', 'linear-gradient(135deg, #7a0006 0%, #000000 100%)'); root.style.setProperty('--color-acento', '#e60012'); }
             else if (plataforma === 'nds') { root.style.setProperty('--bg-general', 'linear-gradient(135deg, #004b57 0%, #000000 100%)'); root.style.setProperty('--color-acento', '#00e5ff'); }
-            
+
             mainMenu.style.display = 'none';
             uploadScreen.style.display = 'flex';
             subtitulo.style.display = 'none';
@@ -216,20 +217,20 @@
             document.getElementById('titulo-principal').style.display = 'none';
             btnDescargar.style.display = 'none';
             btnModal.style.display = 'none';
-            
+
             emuContainer.style.display = 'block';
             emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
-            
+
             const tRomUrl = URL.createObjectURL(file);
             window.EJS_player = '#game'; 
             window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
             window.EJS_gameUrl = tRomUrl; 
             window.EJS_startOnLoaded = true;
-            
+
             if (consolaActiva === 'psx') window.EJS_core = 'psx';
             else if (consolaActiva === 'n64') window.EJS_core = 'n64';
             else if (consolaActiva === 'nds') window.EJS_core = 'nds';
-            
+
             const script = document.createElement('script'); 
             script.src = "https://cdn.emulatorjs.org/stable/data/loader.js"; 
             document.body.appendChild(script);
