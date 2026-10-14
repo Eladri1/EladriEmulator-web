@@ -18,8 +18,10 @@
       --green-2: #3cd98b;
       --line: rgba(128,255,176,.2);
     }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -27,41 +29,268 @@
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+
     a { color: inherit; }
-    .page { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 24px 0 54px; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 34px; }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 850; letter-spacing: -.04em; }
-    .brand-mark { display: grid; place-items: center; width: 39px; height: 39px; border-radius: 12px; color: #07110c; background: var(--green); box-shadow: 0 0 26px rgba(128,255,176,.23); font-size: 21px; }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 54px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 34px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      letter-spacing: -.04em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      color: #07110c;
+      background: var(--green);
+      box-shadow: 0 0 26px rgba(128,255,176,.23);
+      font-size: 21px;
+    }
+
     .brand-name { font-size: 17px; }
-    .top-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px; }
-    .back, .more-games { display: inline-flex; gap: 8px; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 10px 15px; text-decoration: none; color: var(--green); font-size: 13px; font-weight: 750; transition: background .2s, transform .2s; }
-    .back:hover, .more-games:hover { background: rgba(128,255,176,.09); transform: translateY(-1px); }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .back, .more-games {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 15px;
+      text-decoration: none;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 750;
+      transition: background .2s, transform .2s;
+    }
+
+    .back:hover, .more-games:hover {
+      background: rgba(128,255,176,.09);
+      transform: translateY(-1px);
+    }
+
     .more-games { background: rgba(128,255,176,.07); }
+
     .hero { margin: 0 0 24px; }
-    .eyebrow { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: rgba(128,255,176,.055); color: var(--green); border-radius: 999px; padding: 7px 11px; text-transform: uppercase; letter-spacing: .14em; font-size: 10px; font-weight: 850; }
-    h1 { margin: 15px 0 10px; font-size: clamp(34px, 6vw, 58px); line-height: .98; letter-spacing: -.055em; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: rgba(128,255,176,.055);
+      color: var(--green);
+      border-radius: 999px;
+      padding: 7px 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: 10px;
+      font-weight: 850;
+    }
+
+    h1 {
+      margin: 15px 0 10px;
+      font-size: clamp(34px, 6vw, 58px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
     h1 span { color: var(--green); }
-    .intro { color: var(--muted); max-width: 650px; margin: 0; line-height: 1.65; font-size: 15px; }
-    .toolbar { display: flex; align-items: center; gap: 12px; justify-content: space-between; margin: 25px 0 18px; flex-wrap: wrap; }
-    .search { flex: 1 1 230px; max-width: 440px; position: relative; }
-    .search input { width: 100%; background: rgba(17,25,31,.88); border: 1px solid rgba(158,180,181,.22); border-radius: 13px; color: var(--text); font: inherit; padding: 13px 15px 13px 42px; outline: none; }
-    .search input:focus { border-color: var(--green-2); box-shadow: 0 0 0 3px rgba(60,217,139,.1); }
-    .search svg { position: absolute; left: 14px; top: 13px; color: var(--muted); }
-    .count { font-size: 12px; color: var(--muted); white-space: nowrap; }
-    .count strong { color: var(--green); font-size: 14px; }
-    .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 17px; }
-    .card { min-width: 0; overflow: hidden; background: linear-gradient(160deg, rgba(23,35,42,.96), rgba(12,18,22,.98)); border: 1px solid rgba(158,180,181,.15); border-radius: 17px; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
-    .card:hover { transform: translateY(-5px); border-color: rgba(128,255,176,.53); box-shadow: 0 14px 36px rgba(0,0,0,.28); }
-    .cover { min-height: 188px; aspect-ratio: 4 / 5; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; isolation: isolate; padding: 15px; text-align: center; }
-    .cover::before, .cover::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
-    .cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
-    .cover.has-image::before, .cover.has-image::after { display: none; }
-    .cover::before { width: 180%; height: 120%; left: -38%; top: 40%; transform: rotate(-24deg); background: rgba(255,255,255,.075); border-top: 1px solid rgba(255,255,255,.15); border-bottom: 1px solid rgba(255,255,255,.1); }
-    .cover::after { width: 130px; height: 130px; right: -50px; top: -43px; border: 18px solid rgba(255,255,255,.09); border-radius: 50%; }
-    .art { text-shadow: 0 5px 22px rgba(0,0,0,.55); transform: rotate(-4deg); }
-    .art .symbol { display: block; font-size: 49px; line-height: 1; margin-bottom: 16px; filter: drop-shadow(0 7px 10px rgba(0,0,0,.3)); }
-    .art .wordmark { display: block; font-weight: 1000; font-size: clamp(18px, 1.8vw, 25px); line-height: .95; letter-spacing: -.055em; text-transform: uppercase; }
-    .art .sub { display: block; margin-top: 8px; font-size: 10px; letter-spacing: .23em; font-weight: 900; text-transform: uppercase; }
+
+    .intro {
+      color: var(--muted);
+      max-width: 650px;
+      margin: 0;
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+      margin: 25px 0 18px;
+      flex-wrap: wrap;
+    }
+
+    .search {
+      flex: 1 1 230px;
+      max-width: 440px;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      background: rgba(17,25,31,.88);
+      border: 1px solid rgba(158,180,181,.22);
+      border-radius: 13px;
+      color: var(--text);
+      font: inherit;
+      padding: 13px 15px 13px 42px;
+      outline: none;
+    }
+
+    .search input:focus {
+      border-color: var(--green-2);
+      box-shadow: 0 0 0 3px rgba(60,217,139,.1);
+    }
+
+    .search svg {
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      color: var(--muted);
+    }
+
+    .count {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .count strong {
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .card {
+      min-width: 0;
+      overflow: hidden;
+      background: linear-gradient(160deg, rgba(23,35,42,.96), rgba(12,18,22,.98));
+      border: 1px solid rgba(158,180,181,.15);
+      border-radius: 17px;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(128,255,176,.53);
+      box-shadow: 0 14px 36px rgba(0,0,0,.28);
+    }
+
+    .cover {
+      min-height: 188px;
+      aspect-ratio: 4 / 5;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .cover::before, .cover::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .cover-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Si la portada carga, desaparecen el emoji y el texto decorativo. */
+    .cover.has-image .art {
+      display: none;
+    }
+
+    .cover.has-image::before,
+    .cover.has-image::after {
+      display: none;
+    }
+
+    .cover::before {
+      width: 180%;
+      height: 120%;
+      left: -38%;
+      top: 40%;
+      transform: rotate(-24deg);
+      background: rgba(255,255,255,.075);
+      border-top: 1px solid rgba(255,255,255,.15);
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .cover::after {
+      width: 130px;
+      height: 130px;
+      right: -50px;
+      top: -43px;
+      border: 18px solid rgba(255,255,255,.09);
+      border-radius: 50%;
+    }
+
+    .art {
+      text-shadow: 0 5px 22px rgba(0,0,0,.55);
+      transform: rotate(-4deg);
+    }
+
+    .art .symbol {
+      display: block;
+      font-size: 49px;
+      line-height: 1;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 7px 10px rgba(0,0,0,.3));
+    }
+
+    .art .wordmark {
+      display: block;
+      font-weight: 1000;
+      font-size: clamp(18px, 1.8vw, 25px);
+      line-height: .95;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+    }
+
+    .art .sub {
+      display: block;
+      margin-top: 8px;
+      font-size: 10px;
+      letter-spacing: .23em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
     .gta { background: radial-gradient(circle at 70% 28%, #e5aa4c, transparent 22%), linear-gradient(145deg, #293c46, #0e171b 62%, #101b24); }
     .simpsons { background: radial-gradient(circle at 48% 30%, #ffe76d 0 10%, transparent 11%), linear-gradient(145deg, #e8a12a, #b84723 53%, #41243b); }
     .mario { background: radial-gradient(circle at 54% 35%, #f6e6bb 0 17%, transparent 18%), linear-gradient(145deg, #2188d4, #1251a6 60%, #281f63); }
@@ -72,28 +301,122 @@
     .crash { background: radial-gradient(circle at 52% 35%, #ffdc54, transparent 22%), linear-gradient(145deg, #da5a22, #86294f 55%, #251b50); }
     .minecraft { background: linear-gradient(180deg, #7ac8ed 0 43%, #397c38 44% 63%, #584b32 64% 100%); }
     .bo2 { background: radial-gradient(circle at 56% 32%, #bca66d, transparent 22%), linear-gradient(145deg, #77735d, #303a37 48%, #101719); }
+
     .details { padding: 14px 14px 15px; }
-    .genre { color: var(--green); font-size: 9px; text-transform: uppercase; letter-spacing: .15em; font-weight: 900; }
-    .title { margin: 7px 0 7px; font-size: 15px; letter-spacing: -.025em; line-height: 1.22; }
-    .desc { min-height: 38px; margin: 0 0 14px; color: var(--muted); font-size: 11px; line-height: 1.55; }
-    .play { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border-radius: 10px; padding: 10px 12px; background: var(--green); color: #08140d; font-weight: 900; font-size: 12px; text-decoration: none; transition: filter .2s, transform .2s; }
-    .play:hover { filter: brightness(1.07); transform: translateY(-1px); }
+
+    .genre {
+      color: var(--green);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 900;
+    }
+
+    .title {
+      margin: 7px 0 7px;
+      font-size: 15px;
+      letter-spacing: -.025em;
+      line-height: 1.22;
+    }
+
+    .desc {
+      min-height: 38px;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .play {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: var(--green);
+      color: #08140d;
+      font-weight: 900;
+      font-size: 12px;
+      text-decoration: none;
+      transition: filter .2s, transform .2s;
+    }
+
+    .play:hover {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+    }
+
     .play svg { flex: 0 0 auto; }
-    .empty { display: none; text-align: center; color: var(--muted); padding: 35px 0; }
-    footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; border-top: 1px solid rgba(158,180,181,.12); margin-top: 30px; padding-top: 18px; color: #748989; font-size: 11px; }
-    footer a { color: var(--green); text-decoration: none; }
-    @media (max-width: 1000px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-    @media (max-width: 760px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } .cover { min-height: 164px; } .details { padding: 12px; } .desc { min-height: 55px; } }
-    @media (max-width: 520px) { .page { width: min(100% - 22px, 420px); padding-top: 15px; } .topbar { margin-bottom: 27px; align-items: flex-start; } .brand-name { font-size: 14px; } .top-actions { gap: 6px; } .back, .more-games { padding: 8px 10px; font-size: 10px; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; } .cover { min-height: 165px; } .art .symbol { font-size: 42px; } .art .wordmark { font-size: 21px; } .details { padding: 11px; } .title { font-size: 14px; } .desc { min-height: 52px; } footer { align-items: flex-start; flex-direction: column; } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+
+    .empty {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      padding: 35px 0;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      border-top: 1px solid rgba(158,180,181,.12);
+      margin-top: 30px;
+      padding-top: 18px;
+      color: #748989;
+      font-size: 11px;
+    }
+
+    footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .cover { min-height: 164px; }
+      .details { padding: 12px; }
+      .desc { min-height: 55px; }
+    }
+
+    @media (max-width: 520px) {
+      .page { width: min(100% - 22px, 420px); padding-top: 15px; }
+      .topbar { margin-bottom: 27px; align-items: flex-start; }
+      .brand-name { font-size: 14px; }
+      .top-actions { gap: 6px; }
+      .back, .more-games { padding: 8px 10px; font-size: 10px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+      .cover { min-height: 165px; }
+      .art .symbol { font-size: 42px; }
+      .art .wordmark { font-size: 21px; }
+      .details { padding: 11px; }
+      .title { font-size: 14px; }
+      .desc { min-height: 52px; }
+      footer { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="page">
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="Volver a Eladri Emulator">
-        <span class="brand-mark">E</span><span class="brand-name">ELADRI <span style="color:var(--green)">EMULATOR</span></span>
+        <span class="brand-mark">E</span>
+        <span class="brand-name">ELADRI <span style="color:var(--green)">EMULATOR</span></span>
       </a>
+
       <nav class="top-actions" aria-label="Enlaces rápidos">
         <a class="more-games" href="https://gn-math.dev/" target="_blank" rel="noopener noreferrer">Más juegos <span aria-hidden="true">↗</span></a>
         <a class="back" href="index.html"><span aria-hidden="true">←</span> Volver al inicio</a>
@@ -108,71 +431,176 @@
 
     <div class="toolbar">
       <label class="search">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
         <input id="search" type="search" placeholder="Buscar un juego…" autocomplete="off" aria-label="Buscar un juego">
       </label>
       <div class="count"><strong id="visibleCount">10</strong> juegos en la biblioteca</div>
     </div>
 
     <section class="grid" id="gameGrid" aria-label="Lista de juegos">
+
       <article class="card" data-search="gta iii grand theft auto acción mundo abierto">
-        <div class="cover gta has-image"><img class="cover-img" src="portadas/gta3.jpg" alt="Portada de GTA III" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🚘</span><span class="wordmark">Grand<br>Theft Auto</span><span class="sub">Liberty City</span></div></div>
-        <div class="details"><div class="genre">Acción · Mundo abierto</div><h2 class="title">Grand Theft Auto III</h2><p class="desc">Explora Liberty City en el clásico de mundo abierto.</p><a class="play" href="https://wasmarcade.com/gta3" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover gta has-image">
+          <img class="cover-img" src="portadas/gta3.jpg" alt="Portada de GTA III" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🚘</span><span class="wordmark">Grand<br>Theft Auto</span><span class="sub">Liberty City</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Acción · Mundo abierto</div>
+          <h2 class="title">Grand Theft Auto III</h2>
+          <p class="desc">Explora Liberty City en el clásico de mundo abierto.</p>
+          <a class="play" href="https://wasmarcade.com/gta3" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="the simpsons hit and run simpson conducción aventura homer">
-        <div class="cover simpsons has-image"><img class="cover-img" src="portadas/simpsons.jpg" alt="Portada de Los Simpson: Hit & Run" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🍩</span><span class="wordmark">The Simpsons</span><span class="sub">Hit &amp; Run</span></div></div>
-        <div class="details"><div class="genre">Aventura · Conducción</div><h2 class="title">The Simpsons: Hit &amp; Run</h2><p class="desc">Caos por Springfield con la familia amarilla.</p><a class="play" href="https://shar-wasm.cjoseph.workers.dev/?skipmovie" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover simpsons has-image">
+          <img class="cover-img" src="portadas/simpsons.jpg" alt="Portada de Los Simpson: Hit & Run" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🍩</span><span class="wordmark">The Simpsons</span><span class="sub">Hit &amp; Run</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Aventura · Conducción</div>
+          <h2 class="title">The Simpsons: Hit &amp; Run</h2>
+          <p class="desc">Caos por Springfield con la familia amarilla.</p>
+          <a class="play" href="https://shar-wasm.cjoseph.workers.dev/?skipmovie" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="super mario 64 nintendo plataformas mario">
-        <div class="cover mario has-image"><img class="cover-img" src="portadas/mario64.jpg" alt="Portada de Super Mario 64" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🍄</span><span class="wordmark">Super Mario</span><span class="sub">64</span></div></div>
-        <div class="details"><div class="genre">Plataformas</div><h2 class="title">Super Mario 64</h2><p class="desc">Salta, explora y encuentra estrellas por el castillo.</p><a class="play" href="https://olivers.tools/?play" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover mario has-image">
+          <img class="cover-img" src="portadas/mario64.jpg" alt="Portada de Super Mario 64" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🍄</span><span class="wordmark">Super Mario</span><span class="sub">64</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Plataformas</div>
+          <h2 class="title">Super Mario 64</h2>
+          <p class="desc">Salta, explora y encuentra estrellas por el castillo.</p>
+          <a class="play" href="https://olivers.tools/?play" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="skate 3 skateboarding monopatín deportes ea">
-        <div class="cover skate has-image"><img class="cover-img" src="portadas/skate3.jpg" alt="Portada de Skate 3" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🛹</span><span class="wordmark">Skate 3</span><span class="sub">Own The Spot</span></div></div>
-        <div class="details"><div class="genre">Deportes · Skate</div><h2 class="title">Skate 3</h2><p class="desc">Haz trucos y domina los spots de la ciudad.</p><a class="play" href="https://skate.aaddpp.lol/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover skate has-image">
+          <img class="cover-img" src="portadas/skate3.jpg" alt="Portada de Skate 3" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🛹</span><span class="wordmark">Skate 3</span><span class="sub">Own The Spot</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Deportes · Skate</div>
+          <h2 class="title">Skate 3</h2>
+          <p class="desc">Haz trucos y domina los spots de la ciudad.</p>
+          <a class="play" href="https://skate.aaddpp.lol/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="call of duty modern warfare 2 mw2 shooter fps">
-        <div class="cover mw2 has-image"><img class="cover-img" src="portadas/mw2.jpg" alt="Portada de Modern Warfare 2" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🎖️</span><span class="wordmark">Modern<br>Warfare</span><span class="sub">II</span></div></div>
-        <div class="details"><div class="genre">Acción · FPS</div><h2 class="title">Call of Duty: Modern Warfare 2</h2><p class="desc">Acción militar en primera persona.</p><a class="play" href="https://ovz-game-production.up.railway.app/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover mw2 has-image">
+          <img class="cover-img" src="portadas/mw2.jpg" alt="Portada de Modern Warfare 2" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🎖️</span><span class="wordmark">Modern<br>Warfare</span><span class="sub">II</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Acción · FPS</div>
+          <h2 class="title">Call of Duty: Modern Warfare 2</h2>
+          <p class="desc">Acción militar en primera persona.</p>
+          <a class="play" href="https://ovz-game-production.up.railway.app/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="call of duty black ops zombies bo1 muertos vivientes">
-        <div class="cover bo1 has-image"><img class="cover-img" src="portadas/bo1-zombies.jpg" alt="Portada de Black Ops Zombies" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">☣</span><span class="wordmark">Black Ops</span><span class="sub">Zombies</span></div></div>
-        <div class="details"><div class="genre">Acción · Supervivencia</div><h2 class="title">Call of Duty: Black Ops Zombies</h2><p class="desc">Aguanta tantas rondas como puedas.</p><a class="play" href="https://vel.gg/bo1z" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover bo1 has-image">
+          <img class="cover-img" src="portadas/bo1-zombies.jpg" alt="Portada de Black Ops Zombies" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">☣</span><span class="wordmark">Black Ops</span><span class="sub">Zombies</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Acción · Supervivencia</div>
+          <h2 class="title">Call of Duty: Black Ops Zombies</h2>
+          <p class="desc">Aguanta tantas rondas como puedas.</p>
+          <a class="play" href="https://vel.gg/bo1z" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="doom clásico demonios fps shooter">
-        <div class="cover doom has-image"><img class="cover-img" src="portadas/doom.jpg" alt="Portada de DOOM" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🔥</span><span class="wordmark">DOOM</span><span class="sub">Rip &amp; Tear</span></div></div>
-        <div class="details"><div class="genre">Clásico · FPS</div><h2 class="title">DOOM</h2><p class="desc">El legendario shooter clásico en el navegador.</p><a class="play" href="https://silentspacemarine.com/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover doom has-image">
+          <img class="cover-img" src="portadas/doom.jpg" alt="Portada de DOOM" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🔥</span><span class="wordmark">DOOM</span><span class="sub">Rip &amp; Tear</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Clásico · FPS</div>
+          <h2 class="title">DOOM</h2>
+          <p class="desc">El legendario shooter clásico en el navegador.</p>
+          <a class="play" href="https://silentspacemarine.com/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="crash bash playstation party minijuegos crash bandicoot">
-        <div class="cover crash has-image"><img class="cover-img" src="portadas/crash-bash.jpg" alt="Portada de Crash Bash" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🌀</span><span class="wordmark">Crash Bash</span><span class="sub">Party Games</span></div></div>
-        <div class="details"><div class="genre">Party · Minijuegos</div><h2 class="title">Crash Bash</h2><p class="desc">Minijuegos y desafíos con Crash y compañía.</p><a class="play" href="https://crashbash.app/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover crash has-image">
+          <img class="cover-img" src="portadas/crash-bash.jpg" alt="Portada de Crash Bash" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🌀</span><span class="wordmark">Crash Bash</span><span class="sub">Party Games</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Party · Minijuegos</div>
+          <h2 class="title">Crash Bash</h2>
+          <p class="desc">Minijuegos y desafíos con Crash y compañía.</p>
+          <a class="play" href="https://crashbash.app/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="minecraft construcción bloques sandbox web">
-        <div class="cover minecraft has-image"><img class="cover-img" src="portadas/minecraft.jpg" alt="Portada de Minecraft" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🧱</span><span class="wordmark">Minecraft</span><span class="sub">Web Edition</span></div></div>
-        <div class="details"><div class="genre">Construcción · Sandbox</div><h2 class="title">Minecraft</h2><p class="desc">Construye con bloques y explora desde el navegador.</p><a class="play" href="https://wasmarcade.com/minecraft" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover minecraft has-image">
+          <img class="cover-img" src="portadas/minecraft.jpg" alt="Portada de Minecraft" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🧱</span><span class="wordmark">Minecraft</span><span class="sub">Web Edition</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Construcción · Sandbox</div>
+          <h2 class="title">Minecraft</h2>
+          <p class="desc">Construye con bloques y explora desde el navegador.</p>
+          <a class="play" href="https://wasmarcade.com/minecraft" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
       <article class="card" data-search="call of duty black ops 2 black ops ii bo2 shooter fps acción">
-        <div class="cover bo2 has-image"><img class="cover-img" src="portadas/black-ops-2.jpg" alt="Portada de Black Ops II" loading="lazy" onerror="this.remove()"><div class="art"><span class="symbol">🎖️</span><span class="wordmark">Black Ops</span><span class="sub">II</span></div></div>
-        <div class="details"><div class="genre">Acción · FPS</div><h2 class="title">Call of Duty: Black Ops II</h2><p class="desc">Combate futurista en la segunda entrega de Black Ops.</p><a class="play" href="https://goofyahhbro69420.github.io/Black-Ops-2/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a></div>
+        <div class="cover bo2 has-image">
+          <img class="cover-img" src="portadas/black-ops-2.jpg" alt="Portada de Black Ops II" loading="lazy" onerror="this.parentElement.classList.remove('has-image');this.remove()">
+          <div class="art"><span class="symbol">🎖️</span><span class="wordmark">Black Ops</span><span class="sub">II</span></div>
+        </div>
+        <div class="details">
+          <div class="genre">Acción · FPS</div>
+          <h2 class="title">Call of Duty: Black Ops II</h2>
+          <p class="desc">Combate futurista en la segunda entrega de Black Ops.</p>
+          <a class="play" href="https://goofyahhbro69420.github.io/Black-Ops-2/" target="_blank" rel="noopener noreferrer">Jugar <span aria-hidden="true">↗</span></a>
+        </div>
       </article>
+
     </section>
+
     <p id="empty" class="empty">No se han encontrado juegos con esa búsqueda.</p>
 
-    <footer><span>Eladri Emulator · Biblioteca de juegos web</span><a href="index.html">Volver a Eladri Emulator ↗</a></footer>
+    <footer>
+      <span>Eladri Emulator · Biblioteca de juegos web</span>
+      <a href="index.html">Volver a Eladri Emulator ↗</a>
+    </footer>
   </main>
+
   <script>
     const search = document.getElementById('search');
     const cards = [...document.querySelectorAll('.card')];
     const visibleCount = document.getElementById('visibleCount');
     const empty = document.getElementById('empty');
+
     search.addEventListener('input', () => {
       const query = search.value.trim().toLocaleLowerCase('es');
       let visible = 0;
+
       for (const card of cards) {
-        const matches = (card.dataset.search + ' ' + card.innerText).toLocaleLowerCase('es').includes(query);
+        const matches = (card.dataset.search + ' ' + card.innerText)
+          .toLocaleLowerCase('es')
+          .includes(query);
+
         card.hidden = !matches;
         if (matches) visible++;
       }
+
       visibleCount.textContent = visible;
       empty.style.display = visible ? 'none' : 'block';
     });
